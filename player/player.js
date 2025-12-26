@@ -18,7 +18,7 @@ const SHADER_DIR = "../shaders/";                 // fragment shaders + manifest
 const VERT_DIR = "../verts/";                     // vertex shaders
 const DEFAULT_VERT_FILE = "clipspace_to_uv.vert";
 const MANIFEST_URL = SHADER_DIR + "manifest.json";
-const DEFAULT_IMAGE_URL = "./test.png";           // inside /player/
+const DEFAULT_IMAGE_URL = "/assets/test.png";           // moved to assets/
 
 // Fullscreen quad (2 triangles) in clip space
 const quad = new Float32Array([
