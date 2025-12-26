@@ -19,14 +19,26 @@ Write-Host "Listening... (press Ctrl+C to terminate)"
 
 try {
     # Note: expose a shutdown URL to stop the server remotely: /shutdown
-    while ($listener.IsListening) {
+    $stopRequested = $false
+    while ($listener.IsListening -and -not $stopRequested) {
         $context = $listener.GetContext()
         $req = $context.Request
         $path = $req.Url.AbsolutePath.TrimStart('/')
         if ($path -eq '') { $path = $DefaultPage }
         $file = Join-Path $root $path
 
-        if (Test-Path $file) {
+        # remote shutdown trigger: handle before file serving
+        if ($path -ieq 'shutdown') {
+            Write-Host "Shutdown request received - stopping server."
+            $context.Response.StatusCode = 200
+            $msg = [System.Text.Encoding]::UTF8.GetBytes('Server shutting down.')
+            $context.Response.ContentLength64 = $msg.Length
+            $context.Response.OutputStream.Write($msg, 0, $msg.Length)
+            $context.Response.OutputStream.Flush()
+            $context.Response.OutputStream.Close()
+            $stopRequested = $true
+        }
+        elseif (Test-Path $file) {
             $bytes = [System.IO.File]::ReadAllBytes($file)
             switch -Regex ($file) {
                 '\.html$' { $context.Response.ContentType = 'text/html'; break }
@@ -39,21 +51,30 @@ try {
             }
             $context.Response.ContentLength64 = $bytes.Length
             $context.Response.OutputStream.Write($bytes, 0, $bytes.Length)
+            $context.Response.OutputStream.Close()
         }
         else {
             $context.Response.StatusCode = 404
             $msg = [System.Text.Encoding]::UTF8.GetBytes('404 Not Found')
+            $context.Response.ContentLength64 = $msg.Length
             $context.Response.OutputStream.Write($msg, 0, $msg.Length)
+            $context.Response.OutputStream.Close()
         }
 
-        # remote shutdown trigger
-        if ($path -ieq 'shutdown') {
-            Write-Host "Shutdown request received - stopping listener..."
-            try { if ($listener -and $listener.IsListening) { $listener.Stop() } } catch {}
+        if (-not $stopRequested) {
+            $context.Response.OutputStream.Close()
         }
-
-        $context.Response.OutputStream.Close()
     }
+}
+catch [System.Management.Automation.PipelineStoppedException] {
+    # Ctrl+C or pipeline stop: suppress noisy error, exit gracefully
+    Write-Host "Interrupted by user (Ctrl+C)."
+}
+catch [System.OperationCanceledException] {
+    Write-Host "Operation cancelled."
+}
+catch {
+    Write-Host "Server stopped with error: $_"
 }
 finally {
     if ($listener -and $listener.IsListening) { $listener.Stop() }
