@@ -53,6 +53,8 @@ Progression is gated by **spec clarity**, not visual flash.
 - manifest-driven shader discovery (`shaders/manifest.json`)
 - player assumptions documented (how uniforms/time/resolution are provided)
 
+👉 See full detail in [`PHASE0.md`](PHASE0.md)
+
 **Exit criteria**
 - You can add a shader/spec pair without “mystery edits”
 - The player loads a shader reliably
