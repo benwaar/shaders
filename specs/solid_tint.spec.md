@@ -2,18 +2,18 @@
 
 ## 1. Objective
 
-Apply a uniform color tint to the input image with a controllable strength, with neutral defaults.
-
----
+Apply a uniform color tint to the entire input image with a controllable strength, while preserving geometry and readability.
 
 ## 2. Intent
 
-The viewer should perceive a **global** (uniform) tint applied across the entire image.
+The viewer should perceive a consistent, global color cast applied over the existing image, as if a transparent colored filter were placed on top.
 
-- The effect should not introduce any spatial variation (no gradients, no vignetting).
-- The effect should not introduce texture/noise.
-- The effect should not animate or change over time.
-- With default settings, the output should look unchanged.
+The effect must:
+- be spatially uniform (no gradients, no edge emphasis)
+- preserve the underlying image structure (no distortion, blur, or noise)
+- be predictable and monotonic: increasing strength increases the tint effect smoothly
+
+At default values, the effect should be neutral (no visible change).
 
 ---
 
