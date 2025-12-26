@@ -138,6 +138,9 @@ Here are key references used to guide shader development and visual research:
 | 3 | [**Practical Fragment Shaders in Flutter – Droids on Roids**](https://www.thedroidsonroids.com/blog/fragment-shaders-in-flutter-app-development?utm_source=chatgpt.com) | Explains fragment shaders with clear examples, ideal for learning Flutter shader workflow. |
 | 4 | [**Analyzing Optic & Filmic Effects in WebGL**](https://medium.com/%40josecastrovaron/analyzing-optic-and-filmic-effects-in-webgl-47abe74df74e?utm_source=chatgpt.com) | Visual deep-dive into film grain, LUTs, and color grading — useful for connecting film language to shader logic. |
 | 5 | [**Film Grain Shader Example (GLSL)**](https://gameidea.org/2023/12/01/film-grain-shader/?utm_source=chatgpt.com) | Simple yet powerful example shader for film grain — perfect as a starting effect. |
+| 6 | [**Specification by Example (Overview)**](https://en.wikipedia.org/wiki/Specification_by_example) | Conceptual foundation for examples-as-specs and acceptance criteria, closely aligned with this repo’s spec-first approach. |
+| 7 | [**Hello, Spec-Driven Development (Video)**](https://www.youtube.com/watch?v=it2PI_EwEYM) | High-level introduction to writing specs before code and treating them as contracts, not documentation. |
+
 ---
 
 ## 🚦 Start Here for New Sessions
