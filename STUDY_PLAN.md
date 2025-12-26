@@ -1,123 +1,168 @@
-## 🎓 Plan of Study — Spec-Driven Shader Authoring
+# 🎓 Spec-Driven Shader Engineering Study Plan (Flutter Focus)
 
-A practical, art-driven roadmap connecting **film analysis** → **visual specifications** → **shader implementation** → **Flutter integration**.
+A structured, engineering-first roadmap for authoring **deterministic, reusable shaders**
+from **explicit visual specifications**, with Flutter as the target integration environment.
+
+This study treats shaders as **small, constrained programs authored against contracts** —
+not visual experiments.
+
+---
+
+## Core Principle
+
+> **Specs define behavior. Code satisfies specs.**
+
+No shader is written without a spec.  
+No spec is changed without intent changing.
+
+---
+
+## K.E.R.N.E.L Framework (Mandatory)
+
+All work in this study follows **K.E.R.N.E.L**:
+
+- **K – Keep it simple**  
+  One shader = one primary visual objective.
+
+- **E – Easy to verify**  
+  Each spec includes pass/fail acceptance criteria.
+
+- **R – Reproducible**  
+  All inputs have declared ranges and defaults. No hidden constants.
+
+- **N – Narrow scope**  
+  Non-goals are explicit.
+
+- **E – Explicit constraints**  
+  Platform, precision, and performance limits are stated.
+
+- **L – Logical structure**  
+  Specs follow a consistent section order.
+
+If a shader cannot be verified against its spec, it is **incomplete**.
 
 ---
 
 ## Core Loop
 
-**Reference → Spec → Shader → Embed → Review**
+Reference → Visual Spec → Shader Spec → Implementation → Integration → Verification
 
 Progression is gated by **spec clarity**, not visual flash.
 
 ---
 
-## Core Practice: Visual → Shader Specification
+## Phase 1 — Spec Foundations & Spec Gates
 
-Every shader in this study begins with a short written spec.
+**Goal:** learn to write enforceable specs before touching GLSL.
 
-A shader spec defines:
-- **Intent** — the visual or emotional effect being targeted
-- **Inputs** — uniforms, ranges, defaults, and interaction points
-- **Constraints** — platform (WebGL2 / GLSL ES 3.00), precision, performance expectations
-- **Acceptance Criteria** — how you know the shader is “correct”
-- **Non-Goals** — what the shader is explicitly not trying to do
+### Required Sections
 
-No shader is written without a spec.  
-Iteration refines the implementation; the spec changes only when intent changes.
+1. Objective (1 sentence)  
+2. Intent  
+3. Inputs (name, type, range, default)  
+4. Constraints (platform, performance)  
+5. Non-Goals  
+6. Acceptance Criteria (pass/fail)  
+7. Spec Status: DRAFT or LOCKED
 
----
+### Spec Gate
 
-## 🗺️ Visual–Shader Roadmap
-
-```mermaid
-graph TD
-    A[Film Reference] --> B[Visual Spec]
-    B --> C[Shader Implementation]
-    C --> D[Flutter Integration]
-    D --> E[Consistency Review]
-```
+A spec may proceed only if all pass:
+- Single objective
+- ≥ 2 acceptance checks
+- All inputs have defaults
+- Non-goals listed
+- Platform + performance stated
+- Standard section order
 
 ---
 
-## Phase 1 – Visual Language & Spec Writing
+## Phase 2 — Reference Decomposition
 
-**Deliverable:** visual specs, not shaders.
+Translate visual references into **observable, testable behavior**.
 
-- Analyze film scenes using the Visual Study Notebook
-- Describe:
-  - color relationships
-  - contrast
-  - framing
-  - emotional tone
-- For each reference, write a **visual spec**:
-  - what the effect should do
-  - what the viewer should notice
-  - what must remain stable
+Rules:
+- No shader code
+- No vague aesthetic language
+- No implementation thinking
 
-**No GLSL yet.**
+Deliverable: engineering-grade visual specs.
 
 ---
 
-## Phase 2 – Spec → Shader Translation
+## Phase 3 — Visual Spec → Shader Spec
 
-**Deliverable:** shaders that satisfy written specs.
+Convert visual intent into a formal shader contract.
 
-For each visual spec:
-- Translate it into a **shader spec**:
-  - uniforms and ranges
-  - coordinate assumptions
-  - expected behavior
-- Implement the shader in GLSL ES 3.00
-- Validate:
-  - does the output match the spec?
-  - are parameters predictable?
+Add:
+- coordinate space assumptions
+- precision requirements
+- deterministic behavior expectations
 
-Shaders that “look cool” but violate the spec are **not complete**.
+Spec remains **DRAFT**.
 
 ---
 
-## Phase 3 – Spec-Preserving Flutter Integration
+## Phase 4 — Spec-Constrained Shader Implementation
 
-**Deliverable:** embedded shaders that still satisfy their specs.
+Implement the smallest shader that satisfies the spec.
 
-- Integrate shaders via Flutter’s shader APIs
-- Apply them to:
-  - cards
-  - backgrounds
-  - overlays
-- Test dynamic states:
-  - hover
-  - selection
-  - transitions
-
-If embedding breaks intent, **fix the integration**, not the spec.
+Rules:
+- Only declared inputs allowed
+- No hidden constants
+- No behavior outside the spec
 
 ---
 
-## Phase 4 – Cross-Shader Consistency
+## Phase 5 — Spec-Preserving Flutter Integration
 
-**Deliverable:** a shared visual spec.
+Embed shaders without violating intent.
 
-- Define a **shader style guide**:
-  - color usage
-  - motion limits
-  - timing rules
-- Audit shaders against the guide
-- Reduce visual noise and accidental variation
+If integration breaks intent, **integration is wrong**, not the spec.
 
-The goal is a **coherent visual system**, not individual effects.
+---
+
+## Phase 6 — Verification & Spec Locking
+
+Verify acceptance criteria and mark spec **LOCKED**.
+
+Once locked:
+- behavior must not change
+- refactors must preserve output
+- new behavior requires a new spec
+
+---
+
+## Phase 7 — Cross-Shader System Design
+
+Define shared conventions:
+- parameter semantics
+- timing rules
+- naming
+- allowed ranges
+
+Acts as an interface layer.
+
+---
+
+## Phase 8 — Maintenance Under Contract
+
+Locked specs are contracts.
+Refactors must preserve behavior.
 
 ---
 
 ## Completion Criteria
 
 You are done when you can:
+- write specs without coding
+- predict behavior before implementation
+- integrate without altering intent
+- explain why shaders work
+- reject shaders that violate specs without “fixing” them in code
 
-- Write a clear spec from a film still
-- Predict shader behavior before coding
-- Change parameters without breaking intent
-- Embed shaders without altering meaning
-- Explain *why* a shader works, not just how
+---
 
-At this point, you are practicing **deliberate shader authorship**, not experimentation.
+## Final Rule
+
+**If it isn’t verifiable, it isn’t a spec.**

@@ -1,13 +1,13 @@
-# Phase 2 – Learn to Program Shaders (Spec-Driven, with 3 Study Shots)
+# Phase 3 – Learn to Program Shaders (Spec-Driven, with 3 Study Shots)
 _Updated: 2025-12-22_
 
-Phase 2 is about **actually learning to write shaders** in small, safe steps while building three target effects:
+Phase 3 is about **actually learning to write shaders** in small, safe steps while building three target effects:
 
 1. **Study 01 – Foundations / Cinematic Post**  
 2. **Study 02 – Distant Forest Explosion**  
 3. **Study 03 – Rocket Propulsion**
 
-**What’s new in this revision:** Phase 2 is now **spec-driven**. Every shader change is anchored to an explicit spec so the work stays reproducible, reviewable, and intentional.
+**What’s new in this revision:** Phase 3 is now **spec-driven**. Every shader change is anchored to an explicit spec so the work stays reproducible, reviewable, and intentional.
 
 ---
 
@@ -22,9 +22,9 @@ Rules:
 
 ---
 
-## Phase 2 Deliverables (Concrete)
+## Phase 3 Deliverables (Concrete)
 
-By the end of Phase 2 you should have:
+By the end of Phase 3 you should have:
 
 - ✅ Three small “Study Shot” shaders (01/02/03) that meet their specs
 - ✅ A spec file for each study shot (visual + shader spec in one document)
@@ -62,7 +62,7 @@ shaders/
 
 ## 0. Goals & Mental Model – 💡 SHADER · 🧵 PAR · 🧱 ENG
 
-By the end of Phase 2 you should feel:
+By the end of Phase 3 you should feel:
 
 - [ ] Comfortable editing fragment shaders without fear of “breaking everything”. 💡🧱  
 - [ ] Able to **reason in UV space** (0–1 coordinates over the screen). 💡🧮  
@@ -406,7 +406,7 @@ Use the repo’s noise utility (or a simple hash/value noise). Visualize 0–1.
 
 ## 8. Suggested Practice Loop – 🧱 ENG · 🧵 PAR
 
-To really own Phase 2:
+To really own Phase 3:
 
 - [ ] For each new concept, build a **tiny debug shader** that shows it in isolation.
 - [ ] Port the concept into the relevant Study (01/02/03).

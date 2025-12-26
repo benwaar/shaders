@@ -1,8 +1,10 @@
-# 🎨 Visual Language & Shader Coding Study (Flutter Focus)
+# 🎨 Visual Language & Spec-Driven Shader Engineering (Flutter Focus)
 
-This repository explores how **visual language in film** can inspire **spec-driven shader design** for 2D games — focusing on **emotion, color, and texture** rather than 3D realism.
+This repository explores how **visual language in film** can inspire **spec-driven shader design** for 2D games — focusing on deterministic visual behavior (emotion, color, texture) rather than 3D realism.
 
 Shaders here are treated as **small, constrained programs authored against explicit visual specifications**, not ad-hoc visual experiments.
+
+This project approaches film references as visual systems to be analyzed, not styles to be copied. Many “film-inspired” shader workflows take one of two common routes: an art-first approach that tries to replicate a look through descriptive labels and aesthetic tweaking (“make it more cinematic,” “more gritty,” “like Blade Runner”), or a math-first approach that builds effects from known techniques (noise, blur, bloom, LUTs) and hopes the result lands emotionally. Both can produce good images, but they often struggle with repeatability: intent gets fuzzy, parameters behave unpredictably, and integration into a real UI quietly changes the effect. Here, we treat a film still like a reference implementation: we identify the variables, invariants, constraints, and acceptance checks that make the image read the way it does, then encode those behaviors into a spec before writing any GLSL. The goal isn’t resemblance — it’s deterministic behavior that preserves meaning when reused, refactored, and shipped inside interactive 2D worlds.
 
 > _“Studying how cinematic imagery can live inside interactive flat worlds — deliberately and repeatably.”_
 
@@ -14,7 +16,7 @@ Every shader in this repository is written **from a spec first**.
 
 The workflow is:
 
-**Film Reference → Visual Spec → Shader Implementation → Flutter Integration → Review**
+**Film Reference → Visual Spec → Shader Spec → Implementation → Flutter Integration → Verification**
 
 A shader spec defines:
 - **Intent** — the visual or emotional effect being targeted
@@ -23,25 +25,44 @@ A shader spec defines:
 - **Acceptance Criteria** — how to tell the shader is “working”
 - **Non-goals** — what is explicitly not being attempted
 
-Iteration refines the **implementation**; the **spec only changes when intent changes**.
+Iteration refines the **implementation**; the **spec only changes when intent changes** and must pass a defined spec gate before coding begins.
+
+---
+
+## 🧱 Spec Discipline (K.E.R.N.E.L)
+
+All shader work in this repository follows **K.E.R.N.E.L** principles:
+
+- **Keep it simple** — one visual objective per shader
+- **Easy to verify** — pass/fail acceptance criteria required
+- **Reproducible** — all inputs have defaults; no hidden constants
+- **Narrow scope** — non-goals are explicit
+- **Explicit constraints** — platform, precision, performance stated
+- **Logical structure** — specs follow a consistent section order
+
+If a shader cannot be verified against its spec, it is considered incomplete.
+This repository prioritizes correctness, predictability, and reuse over novelty.
+
 
 ---
 
 ## 🧩 Study Landscape
 
 ```text
-Visual Storytelling
-├── Film Imagery Analysis
-│   ├── Composition, Color, Light, Texture
-│   └── Symbolism & Visual Mood
+Visual Reference Analysis
+├── Observable Visual Behavior
+│   ├── Spatial relationships (composition as layout constraints)
+│   ├── Color relationships (ranges, mappings, invariants)
+│   ├── Light behavior (gradients, falloff, highlights)
+│   └── Surface behavior (grain, blur, noise, distortion)
 ├── Spec-Driven Shader Design
 │   ├── Fragment Shaders (GLSL ES 3.00)
-│   ├── Procedural Light, Blur, Grain, Tint
-│   └── Color Grading & Post-FX for 2D Cards
+│   ├── Procedural effects (light, blur, grain, tint)
+│   └── Color grading & post-FX for 2D UI elements
 └── Visual Integration in Flutter
-    ├── Applying Shaders to Card Elements
-    ├── Interactive Layering (hover, selection)
-    └── Cinematic Style Consistency Across Scenes
+    ├── Applying shaders to cards and surfaces
+    ├── Interaction-driven parameter changes (hover, selection)
+    └── Cross-scene consistency via shared specs
 ```
 
 ---
@@ -54,7 +75,8 @@ Continue from the current phase here:
 👉 **[STUDY_PLAN.md](STUDY_PLAN.md)**  
 👉 **[PHASE2.md](PHASE2.md)**
 
-Progression is gated by **spec clarity**, not visual flash.
+Progression is gated by **spec clarity**, not visual flash.  
+Shaders are not implemented unless their specs meet minimum verification criteria.
 
 ---
 
@@ -88,7 +110,16 @@ This project follows a **deliberate progression**:
 2. Express that intent as a **shader spec**  
 3. Implement the smallest shader that satisfies the spec  
 4. Integrate it into Flutter UI elements  
-5. Review for consistency, restraint, and clarity  
+5. Review for spec compliance, consistency, restraint, and clarity
+
+### Spec Status Convention
+
+Every shader spec ends with a status line:
+
+- `Spec Status: DRAFT` — intent still evolving
+- `Spec Status: LOCKED` — behavior must not change
+
+Only `LOCKED` specs may be reused or refactored.
 
 > _“Each shader teaches one piece of visual language.”_
 
