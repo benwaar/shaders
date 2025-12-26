@@ -6,6 +6,9 @@ from **explicit visual specifications**, with Flutter as the target integration 
 This study treats shaders as **small, constrained programs authored against contracts** —
 not visual experiments.
 
+This project is designed to be teachable: each phase produces artifacts that can be reused
+as examples, templates, and constraints for others later.
+
 ---
 
 ## Core Principle
@@ -21,23 +24,12 @@ No spec is changed without intent changing.
 
 All work in this study follows **K.E.R.N.E.L**:
 
-- **K – Keep it simple**  
-  One shader = one primary visual objective.
-
-- **E – Easy to verify**  
-  Each spec includes pass/fail acceptance criteria.
-
-- **R – Reproducible**  
-  All inputs have declared ranges and defaults. No hidden constants.
-
-- **N – Narrow scope**  
-  Non-goals are explicit.
-
-- **E – Explicit constraints**  
-  Platform, precision, and performance limits are stated.
-
-- **L – Logical structure**  
-  Specs follow a consistent section order.
+- **K – Keep it simple**: one shader = one primary visual objective  
+- **E – Easy to verify**: pass/fail acceptance criteria required  
+- **R – Reproducible**: inputs have ranges + defaults; no hidden constants  
+- **N – Narrow scope**: non-goals are explicit  
+- **E – Explicit constraints**: platform, precision, performance stated  
+- **L – Logical structure**: specs follow a consistent section order  
 
 If a shader cannot be verified against its spec, it is **incomplete**.
 
@@ -51,104 +43,207 @@ Progression is gated by **spec clarity**, not visual flash.
 
 ---
 
-## Phase 1 — Spec Foundations & Spec Gates
+# Phase 0 — Repository Building Blocks (Setup Once)
 
-**Goal:** learn to write enforceable specs before touching GLSL.
+**Goal:** create a stable project surface area before learning effects.
 
-### Required Sections
+**Deliverables**
+- `specs/` and `shaders/` folder structure
+- `specs/SPEC_TEMPLATE.md` (single source of truth)
+- manifest-driven shader discovery (`shaders/manifest.json`)
+- player assumptions documented (how uniforms/time/resolution are provided)
 
-1. Objective (1 sentence)  
-2. Intent  
-3. Inputs (name, type, range, default)  
-4. Constraints (platform, performance)  
-5. Non-Goals  
-6. Acceptance Criteria (pass/fail)  
-7. Spec Status: DRAFT or LOCKED
-
-### Spec Gate
-
-A spec may proceed only if all pass:
-- Single objective
-- ≥ 2 acceptance checks
-- All inputs have defaults
-- Non-goals listed
-- Platform + performance stated
-- Standard section order
+**Exit criteria**
+- You can add a shader/spec pair without “mystery edits”
+- The player loads a shader reliably
 
 ---
 
-## Phase 2 — Reference Decomposition
+# Phase 1 — Spec Foundations & Spec Gates
 
-Translate visual references into **observable, testable behavior**.
+**Goal:** learn to write enforceable shader specs before writing GLSL.
+
+A shader may not be implemented unless its spec passes the Spec Gate.
+
+**Spec structure (required):**
+- Objective (one sentence)
+- Intent
+- Inputs (name, type, range, default)
+- Constraints (platform, performance)
+- Non-goals
+- Acceptance criteria (pass/fail)
+- Spec status (`DRAFT` or `LOCKED`)
+
+**Spec Gate (must pass):**
+- Single objective
+- At least two acceptance checks
+- All inputs declared with defaults
+- Non-goals explicitly listed
+- Platform and performance constraints stated
+- Standard section order followed
+
+👉 See full detail in [`PHASE1.md`](PHASE1.md)
+
+**Exit criteria**
+- You can write specs without referencing implementation
+- You can predict behavior from the spec alone
+
+---
+
+# Phase 2 — Simple Effect Library (Skill Ladder)
+
+**Goal:** build a small, controlled set of effects from deterministic → time-based.
+
+Each effect is specified, implemented, verified, and locked before moving on.
+
+- **Solid Tint** — uniform color modification with neutral defaults  
+- **Brightness / Contrast** — deterministic color remapping  
+- **Vignette** — spatial falloff without time or noise  
+- **Scanlines** — static periodic screen-space pattern  
+- **Grain** — deterministic noise via explicit seed  
+- **Flicker** — controlled, time-based intensity variation (last)
+
+👉 See full detail in [`PHASE2.md`](PHASE2.md)
+
+**Exit criteria**
+- Each shader has a spec and a passing implementation in the player
+- At least 2–3 specs are `LOCKED`
+- You can explain each effect in terms of inputs + invariants
+
+---
+
+# Phase 3 — Cross-Shader Conventions (Mini “Framework”)
+
+**Goal:** define shared conventions so shaders behave as a coherent system.
+
+**Deliverables**
+- shared uniform semantics (naming + meaning)
+- timing rules (if/when time is allowed)
+- default behavior rule (neutral output by default)
+- parameter ranges and units conventions
+- naming conventions for files/specs
+
+**Exit criteria**
+- A new shader follows conventions by default
+- Specs read consistently across the library
+
+---
+
+# Phase 4 — Reference Decomposition (Systems Engineer Lens)
+
+**Goal:** learn to observe film references as **visual systems**.
+
+Translate references into **observable, testable behavior**.
 
 Rules:
-- No shader code
-- No vague aesthetic language
-- No implementation thinking
+- no shader code
+- no vague aesthetic language
+- no implementation thinking
 
 Deliverable: engineering-grade visual specs.
 
+👉 (Optional) Put details in `PHASE4.md` when you’re ready.
+
+**Exit criteria**
+- You can produce a visual spec that lists variables, invariants, and constraints
+- You can write at least 3 “acceptance checks” from a reference without coding
+
 ---
 
-## Phase 3 — Visual Spec → Shader Spec
+# Phase 5 — Visual Spec → Shader Spec
 
-Convert visual intent into a formal shader contract.
+**Goal:** translate visual specs into formal shader contracts.
 
 Add:
-- coordinate space assumptions
+- coordinate assumptions
 - precision requirements
 - deterministic behavior expectations
+- integration risks (gamma, scaling, sampling)
 
-Spec remains **DRAFT**.
+Spec remains **DRAFT** until verified in the player.
+
+**Exit criteria**
+- You can convert a reference into a runnable, spec’d shader plan
+- You can identify what must be uniform-controlled vs constant (and document it)
 
 ---
 
-## Phase 4 — Spec-Constrained Shader Implementation
+# Phase 6 — Spec-Constrained Implementation
 
-Implement the smallest shader that satisfies the spec.
+**Goal:** implement the smallest shader that satisfies the spec.
 
 Rules:
-- Only declared inputs allowed
-- No hidden constants
-- No behavior outside the spec
+- only declared inputs allowed
+- no hidden constants (if it matters, it’s an input or documented)
+- no behavior outside the spec
+
+**Exit criteria**
+- Implementation matches acceptance criteria without “hand-wavy” exceptions
 
 ---
 
-## Phase 5 — Spec-Preserving Flutter Integration
+# Phase 7 — Spec-Preserving Flutter Integration
 
-Embed shaders without violating intent.
+**Goal:** embed shaders without violating intent.
 
 If integration breaks intent, **integration is wrong**, not the spec.
 
+**Exit criteria**
+- The shader behaves the same in isolation and in its real UI context
+
 ---
 
-## Phase 6 — Verification & Spec Locking
+# Phase 8 — Verification & Spec Locking
 
-Verify acceptance criteria and mark spec **LOCKED**.
+**Goal:** freeze behavior once verified.
 
 Once locked:
 - behavior must not change
 - refactors must preserve output
 - new behavior requires a new spec
 
----
-
-## Phase 7 — Cross-Shader System Design
-
-Define shared conventions:
-- parameter semantics
-- timing rules
-- naming
-- allowed ranges
-
-Acts as an interface layer.
+**Exit criteria**
+- You have a small locked library (at least 3 locked specs)
+- You can refactor safely without changing behavior
 
 ---
 
-## Phase 8 — Maintenance Under Contract
+# Phase 9 — Automation & Spec-Flow Framework (Completion Phase)
 
-Locked specs are contracts.
-Refactors must preserve behavior.
+**Goal:** introduce tooling that enforces discipline and supports teaching/reuse.
+
+Automation is introduced only after the process is stable.
+
+**Add lightweight automation that enforces structure (not intent):**
+- block merges/commits if:
+  - a `.frag` is added/changed without a corresponding `.spec.md`
+  - Spec Status is missing
+  - required headings are missing
+- optional: auto-generate a simple index of shaders/specs from `manifest.json`
+
+**Deliverables**
+- a repo checklist / contribution guide aligned to the Spec Gate
+- minimal CI checks (or pre-commit hooks) enforcing structure
+- a “spec flow” rule: `spec → implement → verify → lock`
+
+**Exit criteria (recommended “graduation” point)**
+- New work cannot bypass specs accidentally
+- The repo teaches discipline by default (even with collaborators)
+- Locked specs remain stable under normal iteration
+
+---
+
+# Phase 10 — Maintenance Under Contract
+
+**Goal:** keep the library stable as it grows.
+
+- locked specs are contracts
+- refactors must preserve behavior
+- failures are classified as:
+  - spec violation vs implementation defect vs integration defect
+
+**Exit criteria**
+- You can evolve the repo without breaking trust in prior work
 
 ---
 
@@ -158,11 +253,26 @@ You are done when you can:
 - write specs without coding
 - predict behavior before implementation
 - integrate without altering intent
-- explain why shaders work
+- explain failures as spec vs implementation vs integration
 - reject shaders that violate specs without “fixing” them in code
+- enforce the workflow with lightweight automation
 
 ---
 
 ## Final Rule
 
 **If it isn’t verifiable, it isn’t a spec.**
+
+---
+
+## Future Study — Porting & Multi-Backend Support (Deferred)
+
+Porting to other shader languages / native stacks is intentionally out of scope for this study.
+
+It becomes relevant only after:
+- you have a locked library
+- your automation/spec-flow is working
+- you truly need multi-backend support (e.g., Flutter → native rewrite)
+
+When it becomes relevant, treat porting as a new study with its own constraints,
+targets, and verification strategy.

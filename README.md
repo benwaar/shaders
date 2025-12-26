@@ -72,8 +72,9 @@ Visual Reference Analysis
 This repository follows a **structured, spec-led study path**.
 
 Continue from the current phase here:  
-👉 **[STUDY_PLAN.md](STUDY_PLAN.md)**  
-👉 **[PHASE2.md](PHASE2.md)**
+👉 **[STUDY_PLAN.md](STUDY_PLAN.md)** — overall structure and rules  
+👉 **[PHASE1.md](PHASE1.md)** — spec foundations and spec gate  
+👉 **[PHASE2.md](PHASE2.md)** — simple effect specs (building blocks)
 
 Progression is gated by **spec clarity**, not visual flash.  
 Shaders are not implemented unless their specs meet minimum verification criteria.
