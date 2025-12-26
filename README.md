@@ -73,7 +73,7 @@ This repository follows a **structured, spec-led study path**.
 
 Continue from the current phase here:  
 👉 **[STUDY_PLAN.md](STUDY_PLAN.md)** — overall structure and rules  
-👉 **[PHASE0.md](PHASE0.md)** — setup for specs and graphics
+👉 **[PHASE0.md](PHASE0.md)** — setup for specs and graphics  
 👉 **[PHASE1.md](PHASE1.md)** — spec foundations and spec gate  
 👉 **[PHASE2.md](PHASE2.md)** — simple effect specs (building blocks)
 
