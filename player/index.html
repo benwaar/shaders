@@ -1,44 +1,41 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Shader Player (WebGL2) – uses ../shaders</title>
-  <style>
-    :root{color-scheme:dark light}
-    body{margin:0;font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;background:#0b0b0b;color:#e6e6e6}
-    header{padding:12px 16px;border-bottom:1px solid #222;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-    main{padding:16px;display:grid;gap:16px}
-    canvas{width:1024px;max-width:95vw;height:auto;border:1px solid #222;background:black;border-radius:8px;display:block}
-    .panel{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
-    .controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-    .u{display:flex;flex-direction:column;gap:4px;padding:8px;border:1px solid #222;border-radius:8px;background:#101010;min-width:180px}
-    .u label{font-size:12px;opacity:.85}
-    select,input[type=range],button{background:#111;border:1px solid #333;border-radius:6px;color:#eee;padding:6px 8px}
-    input[type=range]{width:180px}
-    .small{font-size:12px;opacity:.7}
-    .row{display:flex;gap:8px;align-items:center}
-    code{background:#111;border:1px solid #222;border-radius:4px;padding:2px 4px}
-  </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Minimal Shader Player</title>
+  <link rel="stylesheet" href="./player.css">
 </head>
 <body>
-  <header>
-    <strong>Shader:</strong>
+  <div id="view">
+    <canvas id="c"></canvas>
+  </div>
+
+  <div id="panel">
+    <div class="mono">Minimal Shader Player</div>
+
+    <label for="shaderSelect">Shader</label>
     <select id="shaderSelect"></select>
-    <button id="reload">Reload</button>
-    <div class="panel">
-      <div class="row">
-        <label>Lock <span id="lockVal">0.00</span></label>
-        <input id="lock" type="range" min="0" max="1" step="0.001" value="0"/>
-        <label><input id="auto" type="checkbox" checked/> Auto-train</label>
-      </div>
-      <div class="small">This player loads from <code>../shaders/</code> with no build step. Maintain <code>../shaders/manifest.json</code> by hand. Supports <code>#include "common.glslinc"</code> and auto-sliders for <code>uniform float</code>.</div>
-    </div>
-  </header>
-  <main>
-    <canvas id="glcanvas" width="1024" height="256"></canvas>
-    <section id="uniformPanel" class="controls"></section>
-  </main>
-  <script type="module" src="player.js"></script>
+
+     <div class="row">
+       <label>Vertex Shader</label>
+       <select id="vertSelect"></select>
+     </div>
+
+    <label>Input Image</label>
+    <input id="fileInput" type="file" accept="image/*" />
+
+    <label for="tint">Tint</label>
+    <input id="tint" type="color" value="#ffffff" />
+
+    <label for="strength">
+      Strength <span id="strengthVal" class="mono">0.00</span>
+    </label>
+    <input id="strength" type="range" min="0" max="1" step="0.01" value="0" />
+
+    <div id="errors" class="err"></div>
+  </div>
+
+  <script type="module" src="./player.js"></script>
 </body>
 </html>
