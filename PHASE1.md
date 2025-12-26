@@ -133,3 +133,29 @@ Only after this phase should you proceed to Phase 2.
 ## Reminder
 
 > **If it isn’t verifiable, it isn’t a spec.**
+
+---
+
+## Resources — Companion Videos (Phase 1)
+
+These videos support the **spec-first, behavior-driven mindset** required in Phase 1.
+They are not shader tutorials; they focus on intent, verification, and defining “done.”
+
+- **How to Write Acceptance Tests**  
+  https://www.youtube.com/watch?v=JDD5EEJgpHU  
+  Introduces acceptance criteria as pass/fail checks rather than subjective judgment.
+
+- **Acceptance Testing with Executable Specifications**  
+  https://www.youtube.com/watch?v=knB4jBafR_M  
+  Explores the idea of specifications as enforceable contracts between intent and implementation.
+
+- **Hello, Spec-Driven Development**  
+  https://www.youtube.com/watch?v=it2PI_EwEYM  
+  A high-level introduction to writing specs before code and why this improves clarity and outcomes.
+
+- **Requirements vs User Stories**  
+  https://www.youtube.com/watch?v=KP0U3I-f9-Y  
+  Useful background on distinguishing intent, requirements, and implementation details.
+
+These resources are intended to be watched selectively and revisited as needed.
+They reinforce *how to think*, not *what to code*.
