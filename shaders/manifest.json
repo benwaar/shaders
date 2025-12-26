@@ -1,9 +1,5 @@
 {
   "fragments": [
-    "solid_tint.frag",
-    "hud_text_flicker.frag",
-    "hud_glyph_flip.frag",
-    "hud_crt_curvature.frag",
-    "hud_symbol_pulse.frag"
+    "solid_tint.frag"
   ]
 }
