@@ -1,7 +1,12 @@
 const canvas = document.getElementById("c");
-const gl = canvas.getContext("webgl2", { antialias: false, premultipliedAlpha: false });
+const gl = canvas.getContext("webgl2", {
+  antialias: false,
+  premultipliedAlpha: false,
+});
 
+// UI elements
 const shaderSelect = document.getElementById("shaderSelect");
+const vertSelect = document.getElementById("vertSelect");
 const fileInput = document.getElementById("fileInput");
 const tintEl = document.getElementById("tint");
 const strengthEl = document.getElementById("strength");
@@ -9,28 +14,20 @@ const strengthVal = document.getElementById("strengthVal");
 const errorsEl = document.getElementById("errors");
 
 // ---- Paths (edit if your folders differ) ----
-const SHADER_DIR = "../shaders/";            // where manifest + .frag files live
+const SHADER_DIR = "../shaders/";                 // fragment shaders + manifest
+const VERT_DIR = "../verts/";                     // vertex shaders
+const DEFAULT_VERT_FILE = "clipspace_to_uv.vert";
 const MANIFEST_URL = SHADER_DIR + "manifest.json";
-const DEFAULT_IMAGE_URL = "./test.png";      // inside /player/
+const DEFAULT_IMAGE_URL = "./test.png";           // inside /player/
 
-// ---- Minimal vertex shader (outputs vTexCoord to match fragment expectation) ----
-const VERT_SRC = `#version 300 es
-in vec2 aPos;
-out vec2 vTexCoord;
-void main() {
-  vTexCoord = aPos * 0.5 + 0.5;
-  gl_Position = vec4(aPos, 0.0, 1.0);
-}
-`;
-
-// Fullscreen quad (2 triangles)
+// Fullscreen quad (2 triangles) in clip space
 const quad = new Float32Array([
   -1, -1,
    1, -1,
   -1,  1,
   -1,  1,
    1, -1,
-   1,  1
+   1,  1,
 ]);
 
 function setError(msg) {
@@ -53,7 +50,8 @@ function compileShader(type, src) {
   const s = gl.createShader(type);
   gl.shaderSource(s, src);
   gl.compileShader(s);
-  if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+  if (!gl.getShaderParameter(s, gl.COMPLETE_STATUS) &&
+      !gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
     const log = gl.getShaderInfoLog(s);
     gl.deleteShader(s);
     throw new Error(log || "Shader compile failed");
@@ -111,7 +109,14 @@ function createTextureFromImage(img) {
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+  gl.texImage2D(
+    gl.TEXTURE_2D,
+    0,
+    gl.RGBA,
+    gl.RGBA,
+    gl.UNSIGNED_BYTE,
+    img
+  );
 
   gl.bindTexture(gl.TEXTURE_2D, null);
   return tex;
@@ -119,7 +124,9 @@ function createTextureFromImage(img) {
 
 async function fetchText(url) {
   const res = await fetch(url, { cache: "no-store" });
-  if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status}`);
+  if (!res.ok) {
+    throw new Error(`Failed to fetch ${url}: ${res.status}`);
+  }
   return await res.text();
 }
 
@@ -132,8 +139,9 @@ async function fetchManifest() {
 let program = null;
 let vao = null;
 let tex = null;
+let vertSource = null;
 
-// uniform locations (optional if shader doesn’t declare them)
+// uniform locations
 let uTextureLoc = null;
 let uTintLoc = null;
 let uStrengthLoc = null;
@@ -149,6 +157,9 @@ function setupQuad() {
   gl.bufferData(gl.ARRAY_BUFFER, quad, gl.STATIC_DRAW);
 
   const aPos = gl.getAttribLocation(program, "aPos");
+  if (aPos === -1) {
+    throw new Error("Vertex shader must declare 'in vec2 aPos;'");
+  }
   gl.enableVertexAttribArray(aPos);
   gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
 
@@ -161,19 +172,35 @@ function cacheUniforms() {
   uTintLoc = gl.getUniformLocation(program, "uTint");
   uStrengthLoc = gl.getUniformLocation(program, "uStrength");
   uResolutionLoc = gl.getUniformLocation(program, "uResolution");
-  uTimeLoc = gl.getUniformLocation(program, "uTime"); // for future
+  uTimeLoc = gl.getUniformLocation(program, "uTime"); // for future shaders
+}
+
+async function loadVertexShader(filename = DEFAULT_VERT_FILE) {
+  const src = await fetchText(VERT_DIR + filename);
+  if (!src.trim().startsWith("#version 300 es")) {
+    throw new Error("Vertex shader must start with '#version 300 es'");
+  }
+  vertSource = src;
+}
+
+async function fetchVertexManifest() {
+  const txt = await fetchText(VERT_DIR + "manifest.json");
+  return JSON.parse(txt);
 }
 
 async function loadShaderAndBuild(shaderFile) {
   setError("");
+  if (!vertSource) {
+    throw new Error("Vertex shader source not loaded");
+  }
+
   const fragSrc = await fetchText(SHADER_DIR + shaderFile);
 
-  // Safety: ensure WebGL2 + GLSL300 fragment includes a version line
   if (!fragSrc.trim().startsWith("#version 300 es")) {
     throw new Error("Fragment shader must start with '#version 300 es'");
   }
 
-  program = createProgram(VERT_SRC, fragSrc);
+  program = createProgram(vertSource, fragSrc);
   cacheUniforms();
   setupQuad();
 }
@@ -183,6 +210,11 @@ function renderFrame(tSec) {
 
   gl.clearColor(0, 0, 0, 1);
   gl.clear(gl.COLOR_BUFFER_BIT);
+
+  if (!program || !vao) {
+    requestAnimationFrame((ms) => renderFrame(ms / 1000));
+    return;
+  }
 
   gl.useProgram(program);
   gl.bindVertexArray(vao);
@@ -194,16 +226,25 @@ function renderFrame(tSec) {
     gl.uniform1i(uTextureLoc, 0);
   }
 
-  if (uResolutionLoc) gl.uniform2f(uResolutionLoc, canvas.width, canvas.height);
-  if (uTimeLoc) gl.uniform1f(uTimeLoc, tSec);
+  if (uResolutionLoc) {
+    gl.uniform2f(uResolutionLoc, canvas.width, canvas.height);
+  }
 
-  // Solid Tint uniforms
+  if (uTimeLoc) {
+    gl.uniform1f(uTimeLoc, tSec);
+  }
+
+  // Solid Tint uniforms (harmless if the shader doesn't declare them)
   const [r, g, b] = hexToRgb01(tintEl.value);
   const strength = parseFloat(strengthEl.value);
   strengthVal.textContent = strength.toFixed(2);
 
-  if (uTintLoc) gl.uniform3f(uTintLoc, r, g, b);
-  if (uStrengthLoc) gl.uniform1f(uStrengthLoc, strength);
+  if (uTintLoc) {
+    gl.uniform3f(uTintLoc, r, g, b);
+  }
+  if (uStrengthLoc) {
+    gl.uniform1f(uStrengthLoc, strength);
+  }
 
   gl.drawArrays(gl.TRIANGLES, 0, 6);
 
@@ -220,10 +261,44 @@ async function main() {
   const img = await loadImage(DEFAULT_IMAGE_URL);
   tex = createTextureFromImage(img);
 
-  // Load manifest + populate dropdown
+  // Load vertex manifest and populate vertex dropdown
+  try {
+    const vmanifest = await fetchVertexManifest();
+    const verts = vmanifest.vertices || [];
+    if (vertSelect && verts.length) {
+      vertSelect.innerHTML = "";
+      for (const v of verts) {
+        const opt = document.createElement("option");
+        opt.value = v;
+        opt.textContent = v;
+        vertSelect.appendChild(opt);
+      }
+      // Load selected or default
+      const preferredVert = verts.includes(DEFAULT_VERT_FILE) ? DEFAULT_VERT_FILE : verts[0];
+      vertSelect.value = preferredVert;
+      await loadVertexShader(vertSelect.value);
+
+      vertSelect.addEventListener("change", async () => {
+        try {
+          await loadVertexShader(vertSelect.value);
+          await loadShaderAndBuild(shaderSelect.value);
+        } catch (e) { setError(e); }
+      });
+    } else {
+      // fallback to default single vertex
+      await loadVertexShader();
+    }
+  } catch (ve) {
+    // If vertex manifest not present, fall back to default
+    await loadVertexShader();
+  }
+
+  // Load fragment manifest + populate dropdown
   const manifest = await fetchManifest();
   const frags = manifest.fragments || [];
-  if (!frags.length) throw new Error("Manifest has no 'fragments'");
+  if (!frags.length) {
+    throw new Error("Manifest has no 'fragments'");
+  }
 
   shaderSelect.innerHTML = "";
   for (const f of frags) {

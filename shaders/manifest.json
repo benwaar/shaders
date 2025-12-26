@@ -1,5 +1,7 @@
 {
   "fragments": [
+    "passthrough.frag",
+    "passthrough2.frag",
     "solid_tint.frag"
   ]
 }

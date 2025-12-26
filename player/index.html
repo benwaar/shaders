@@ -3,18 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Shader Player</title>
-  <style>
-    body { margin: 0; font-family: system-ui, sans-serif; display: grid; grid-template-columns: 1fr 320px; height: 100vh; }
-    #view { display: grid; place-items: center; background: #111; }
-    canvas { width: 100%; height: 100%; display: block; }
-    #panel { padding: 12px; border-left: 1px solid #333; background: #0b0b0b; color: #eee; }
-    label { display: block; margin: 10px 0 6px; font-size: 12px; color: #bbb; }
-    input, select { width: 100%; }
-    .row { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; }
-    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; font-size: 12px; color: #9ee; }
-    .err { white-space: pre-wrap; color: #ff8080; font-size: 12px; margin-top: 10px; }
-  </style>
+  <title>Minimal Shader Player</title>
+  <link rel="stylesheet" href="./player.css">
 </head>
 <body>
   <div id="view">
@@ -27,13 +17,20 @@
     <label for="shaderSelect">Shader</label>
     <select id="shaderSelect"></select>
 
+     <div class="row">
+       <label>Vertex Shader</label>
+       <select id="vertSelect"></select>
+     </div>
+
     <label>Input Image</label>
     <input id="fileInput" type="file" accept="image/*" />
 
     <label for="tint">Tint</label>
     <input id="tint" type="color" value="#ffffff" />
 
-    <label for="strength">Strength <span id="strengthVal" class="mono">0.00</span></label>
+    <label for="strength">
+      Strength <span id="strengthVal" class="mono">0.00</span>
+    </label>
     <input id="strength" type="range" min="0" max="1" step="0.01" value="0" />
 
     <div id="errors" class="err"></div>
