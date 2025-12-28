@@ -114,7 +114,26 @@ Each effect is specified, implemented, verified, and locked before moving on.
 
 ---
 
-# Phase 3 — Cross-Shader Conventions (Mini “Framework”)
+# Phase 3 — Spec-to-Plan (IR) & EXPLAIN Reports **(NEW)**
+**Goal:** build the “query planner” layer: derive an explicit, inspectable **logical + physical plan**
+from each shader spec *before* implementation, so you can reason about correctness + performance.
+
+**Deliverables**
+- Update `SPEC_TEMPLATE.md` to require a **Derived Plan** section:
+  - **Logical Plan (IR):** ordered primitives (sample, remap, falloff, mix, clamp, etc.)
+  - **Physical Plan:** texture fetch count, ALU hotspots, precision policy, coordinate assumptions
+  - **Allowed Rewrites:** semantics-preserving optimizations (constant folding, sample reuse, clamp merge)
+  - **EXPLAIN Trace:** mapping from spec clauses → plan nodes (what came from where)
+- For each Phase 2 shader, produce an **EXPLAIN.md** (or `PLAN` section) alongside the spec.
+
+**Exit criteria**
+- You can predict texture samples + likely hotspots from the plan alone.
+- You can propose ≥3 optimizations as **rewrites** without changing spec semantics.
+- Two implementations can differ in code but share the same plan + verified behavior.
+
+---
+
+# Phase 4 — Cross-Shader Conventions (Mini “Framework”)
 
 **Goal:** define shared conventions so shaders behave as a coherent system.
 
@@ -131,7 +150,7 @@ Each effect is specified, implemented, verified, and locked before moving on.
 
 ---
 
-# Phase 4 — Reference Decomposition (Systems Engineer Lens)
+# Phase 5 — Reference Decomposition (Systems Engineer Lens)
 
 **Goal:** learn to observe film references as **visual systems**.
 
@@ -152,7 +171,7 @@ Deliverable: engineering-grade visual specs.
 
 ---
 
-# Phase 5 — Visual Spec → Shader Spec
+# Phase 6 — Visual Spec → Shader Spec
 
 **Goal:** translate visual specs into formal shader contracts.
 
@@ -170,7 +189,7 @@ Spec remains **DRAFT** until verified in the player.
 
 ---
 
-# Phase 6 — Spec-Constrained Implementation
+# Phase 7 — Spec-Constrained Implementation
 
 **Goal:** implement the smallest shader that satisfies the spec.
 
@@ -184,7 +203,7 @@ Rules:
 
 ---
 
-# Phase 7 — Spec-Preserving Flutter Integration
+# Phase 8 — Spec-Preserving Flutter Integration
 
 **Goal:** embed shaders without violating intent.
 
@@ -195,7 +214,7 @@ If integration breaks intent, **integration is wrong**, not the spec.
 
 ---
 
-# Phase 8 — Verification & Spec Locking
+# Phase 9 — Verification & Spec Locking
 
 **Goal:** freeze behavior once verified.
 
@@ -210,7 +229,7 @@ Once locked:
 
 ---
 
-# Phase 9 — Automation & Spec-Flow Framework (Completion Phase)
+# Phase 10 — Automation & Spec-Flow Framework (Completion Phase)
 
 **Goal:** introduce tooling that enforces discipline and supports teaching/reuse.
 
@@ -235,7 +254,7 @@ Automation is introduced only after the process is stable.
 
 ---
 
-# Phase 10 — Maintenance Under Contract
+# Phase 11 — Maintenance Under Contract
 
 **Goal:** keep the library stable as it grows.
 
