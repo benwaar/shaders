@@ -9,6 +9,8 @@ not visual experiments.
 This project is designed to be teachable: each phase produces artifacts that can be reused
 as examples, templates, and constraints for others later.
 
+👉 See [`docs/FOUNDATIONS.md`](docs/FOUNDATIONS.md) for glossary of terms.
+
 ---
 
 ## Core Principle
@@ -20,30 +22,32 @@ No spec is changed without intent changing.
 
 ---
 
-## K.E.R.N.E.L Framework (Mandatory)
-
-All work in this study follows **K.E.R.N.E.L**:
-
-- **K – Keep it simple**: one shader = one primary visual objective  
-- **E – Easy to verify**: pass/fail acceptance criteria required  
-- **R – Reproducible**: inputs have ranges + defaults; no hidden constants  
-- **N – Narrow scope**: non-goals are explicit  
-- **E – Explicit constraints**: platform, precision, performance stated  
-- **L – Logical structure**: specs follow a consistent section order  
-
-If a shader cannot be verified against its spec, it is **incomplete**.
-
----
-
 ## Core Loop
 
 Reference → Visual Spec → Shader Spec → Implementation → Integration → Verification
 
-Progression is gated by **spec clarity**, not visual flash.
 
 ---
 
-# Phase 0 — Repository Building Blocks (Setup Once)
+# Phase 0 — Spec driven engineering introduction
+
+
+This phase establishes the **mental model and discipline** used throughout the study.
+
+Before writing specs or shader code, we align on:
+- what a spec is (a behavioral contract, not math or prose)
+- how K.E.R.N.E.L is applied as an engineering constraint system
+- the most common early failure modes in shader work (hidden inputs, non-neutral defaults,
+  integration drift, undefined equivalence)
+
+These ideas are introduced here at a high level and expanded in detail in **Phase 0**.
+All later phases assume this shared foundation and terminology.
+
+👉 See full detail in [`PHASE0.md`](PHASE0.md)
+
+---
+
+# Phase 1 — Repository Building Blocks (Setup Once)
 
 **Goal:** create a stable project surface area before learning effects.
 
@@ -61,7 +65,7 @@ Progression is gated by **spec clarity**, not visual flash.
 
 ---
 
-# Phase 1 — Spec Foundations & Spec Gates
+# Phase 2 — Spec Foundations & Spec Gates
 
 **Goal:** learn to write enforceable shader specs before writing GLSL.
 
@@ -92,7 +96,7 @@ A shader may not be implemented unless its spec passes the Spec Gate.
 
 ---
 
-# Phase 2 — Simple Effect Library (Skill Ladder)
+# Phase 3 — Simple Effect Library (Skill Ladder)
 
 **Goal:** build a small, controlled set of effects from deterministic → time-based.
 
@@ -114,7 +118,7 @@ Each effect is specified, implemented, verified, and locked before moving on.
 
 ---
 
-# Phase 3 — Spec-to-Plan (IR) & EXPLAIN Reports **(NEW)**
+# Phase 4 — Spec-to-Plan (IR) & EXPLAIN Reports **(NEW)**
 **Goal:** build the “query planner” layer: derive an explicit, inspectable **logical + physical plan**
 from each shader spec *before* implementation, so you can reason about correctness + performance.
 
@@ -133,7 +137,7 @@ from each shader spec *before* implementation, so you can reason about correctne
 
 ---
 
-# Phase 4 — Cross-Shader Conventions (Mini “Framework”)
+# Phase 5 — Cross-Shader Conventions (Mini “Framework”)
 
 **Goal:** define shared conventions so shaders behave as a coherent system.
 
@@ -150,7 +154,7 @@ from each shader spec *before* implementation, so you can reason about correctne
 
 ---
 
-# Phase 5 — Reference Decomposition (Systems Engineer Lens)
+# Phase 6 — Reference Decomposition (Systems Engineer Lens)
 
 **Goal:** learn to observe film references as **visual systems**.
 
@@ -171,7 +175,7 @@ Deliverable: engineering-grade visual specs.
 
 ---
 
-# Phase 6 — Visual Spec → Shader Spec
+# Phase 7 — Visual Spec → Shader Spec
 
 **Goal:** translate visual specs into formal shader contracts.
 
@@ -189,7 +193,7 @@ Spec remains **DRAFT** until verified in the player.
 
 ---
 
-# Phase 7 — Spec-Constrained Implementation
+# Phase 8 — Spec-Constrained Implementation
 
 **Goal:** implement the smallest shader that satisfies the spec.
 
@@ -203,7 +207,7 @@ Rules:
 
 ---
 
-# Phase 8 — Spec-Preserving Flutter Integration
+# Phase 9 — Spec-Preserving Flutter Integration
 
 **Goal:** embed shaders without violating intent.
 
@@ -214,7 +218,7 @@ If integration breaks intent, **integration is wrong**, not the spec.
 
 ---
 
-# Phase 9 — Verification & Spec Locking
+# Phase 10 — Verification & Spec Locking
 
 **Goal:** freeze behavior once verified.
 
@@ -229,7 +233,7 @@ Once locked:
 
 ---
 
-# Phase 10 — Automation & Spec-Flow Framework (Completion Phase)
+# Phase 11 — Automation & Spec-Flow Framework (Completion Phase)
 
 **Goal:** introduce tooling that enforces discipline and supports teaching/reuse.
 
@@ -254,7 +258,7 @@ Automation is introduced only after the process is stable.
 
 ---
 
-# Phase 11 — Maintenance Under Contract
+# Phase 12 — Maintenance Under Contract
 
 **Goal:** keep the library stable as it grows.
 

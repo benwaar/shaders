@@ -1,417 +1,176 @@
-# Phase 3 – Learn to Program Shaders (Spec-Driven, with 3 Study Shots)
-_Updated: 2025-12-22_
+## Phase 3 — Spec-to-Plan (IR) & EXPLAIN Reports
 
-Phase 3 is about **actually learning to write shaders** in small, safe steps while building three target effects:
+**Goal:** learn to derive an explicit, inspectable **execution plan** from a shader spec,
+analogous to a SQL logical + physical execution plan.
 
-1. **Study 01 – Foundations / Cinematic Post**  
-2. **Study 02 – Distant Forest Explosion**  
-3. **Study 03 – Rocket Propulsion**
+This phase introduces a **mandatory middle layer**:
 
-**What’s new in this revision:** Phase 3 is now **spec-driven**. Every shader change is anchored to an explicit spec so the work stays reproducible, reviewable, and intentional.
+> **Spec → Logical Plan (IR) → Physical Plan → Shader Code**
+
+No GLSL is written in this phase without first producing a plan.
+
+All shaders in this phase:
+- already have a **locked or near-locked spec** (from Phase 2)
+- produce a **Derived Plan** artifact before implementation or refactor
+- can be reasoned about in terms of cost, precision, and correctness *without reading code*
 
 ---
 
-## Core Loop (Spec-Driven)
+### 3.1 Logical Plan (Shader IR)
 
-**Reference → Visual Spec → Shader Spec → Implement → Embed → Review**
+**Purpose:** make the “what happens” explicit, independent of GLSL syntax.
+
+For each shader, derive a **Logical Plan** consisting of:
+- ordered operations (e.g. sample → transform → mix → clamp)
+- data dependencies between operations
+- invariants tied back to spec clauses
+
+Example (conceptual):
+- sample input texture
+- compute UV-based distance
+- apply falloff function
+- blend with original color
+- clamp output
+
+Introduces:
+- shader-as-dataflow thinking
+- operation ordering as semantics
+- separation of intent from implementation
+
+---
+
+### 3.2 Physical Plan (Cost & Precision)
+
+**Purpose:** reason about *how* the logical plan executes on the GPU.
+
+For each logical plan, derive:
+- texture fetch count
+- ALU-heavy operations (distance, trig, noise)
+- precision requirements (highp vs mediump)
+- coordinate space assumptions
+- obvious performance risks
+
+This is the shader equivalent of a **physical execution plan**.
+
+Introduces:
+- cost awareness without premature optimization
+- precision as a design constraint
+- GPU execution mental model
+
+---
+
+### 3.3 Rewrite Rules (Safe Optimizations)
+
+**Purpose:** define which transformations are allowed *without changing spec semantics*.
+
+Examples:
+- constant folding (neutral defaults eliminate branches)
+- clamp merging or hoisting
+- sample reuse (avoid double sampling)
+- replacing expensive ops with equivalent forms (when spec allows)
 
 Rules:
-- **No shader work without a spec.**
-- Iteration refines the **implementation**; the **spec only changes when intent changes**.
-- A shader that “looks cool” but violates the spec is **not complete**.
+- rewrites must be justified by **spec invariants**
+- rewrites are documented, not implicit
+- if a rewrite changes behavior, the spec must change
+
+Introduces:
+- semantics-preserving optimization
+- refactoring under contract
+- explicit optimizer rules
 
 ---
 
-## Phase 3 Deliverables (Concrete)
+### 3.4 EXPLAIN Report
 
-By the end of Phase 3 you should have:
+**Purpose:** make the derivation auditable and teachable.
 
-- ✅ Three small “Study Shot” shaders (01/02/03) that meet their specs
-- ✅ A spec file for each study shot (visual + shader spec in one document)
-- ✅ Parameter contracts (uniforms + ranges) that are stable and documented
-- ✅ A repeatable debug workflow (tiny debug shaders, A/B changes, versioned milestones)
+Each shader produces an **EXPLAIN-style report** that includes:
+- spec clause → logical plan node mapping
+- logical plan → physical cost notes
+- applied (or allowed) rewrites
+- integration risks (gamma, premultiplied alpha, resolution scaling)
 
-Recommended structure (example):
-```
-specs/
-  study01_post.md
-  study02_explosion.md
-  study03_plume.md
-shaders/
-  study01_*.frag
-  study02_*.frag
-  study03_*.frag
-```
+This artifact should let someone understand the shader **without reading GLSL**.
+
+Introduces:
+- explainability as a first-class deliverable
+- reviewable shader design
+- shared vocabulary for discussion and optimization
 
 ---
 
-## Legend (tags) & Progress
+### Exit criteria for Phase 3
 
-- 🎨 **ART** – visual / cinematic craft (composition, grading, FX readability)  
-- 💡 **SHADER** – core shader literacy (GLSL, UVs, textures, uniforms)  
-- 🧮 **MATH** – math & signal-processing (distance, interpolation, frequency)  
-- 🧵 **PAR** – parallel / GPU thinking (data-parallel, divergence, coherence)  
-- 🧱 **ENG** – software-engineering habits (debugging, modularity, APIs, reproducibility)
-
-**Progress legend:**  
-- `[ ]` = not started · `[▶]` = in progress · `[✓]` = done
-
-> Tip: replace `[ ]` with `[▶]` or `[✓]` as you move through tasks. Keep commits or screenshots when you hit milestones.
+- You can predict texture samples and major cost drivers from the plan alone.
+- Two different GLSL implementations can share the same plan and verified behavior.
+- You can propose optimizations *before* writing code.
+- Shader behavior is explainable in the same way a SQL query plan is explainable.
 
 ---
 
-## 0. Goals & Mental Model – 💡 SHADER · 🧵 PAR · 🧱 ENG
+## Resources — Companion Videos (Phase 3)
 
-By the end of Phase 3 you should feel:
-
-- [ ] Comfortable editing fragment shaders without fear of “breaking everything”. 💡🧱  
-- [ ] Able to **reason in UV space** (0–1 coordinates over the screen). 💡🧮  
-- [ ] Familiar with:
-  - [ ] Color math (mixing, lerp, contrast, saturation). 💡🧮🎨  
-  - [ ] Time-based animation (`uTime`, normalized 0–1 “life”). 💡🧮  
-  - [ ] Simple noise and patterns. 💡🧮  
-  - [ ] Masks and compositing (putting FX “behind” things). 💡🎨  
-- [ ] Confident you can build:
-  - [ ] A **simple post-process pass** (Study 01). 💡🎨  
-  - [ ] A **radial explosion over a plate** (Study 02). 💡🧮🧵  
-  - [ ] A **directional plume** (Study 03). 💡🧮🧵  
-
-> 🧵 **PAR mental model:** A fragment shader is a tiny function that runs **independently for every pixel in parallel**. Given the same inputs, it always produces the same color (like a pure function).
+These resources focus on **mental models, execution, and compilation** rather than visual effects.
+They are best watched while **writing plans**, not code.
 
 ---
 
-## 0.5 Spec Gate (NEW) – 🧱 ENG · 🎨 ART
+### GPU & Shader Execution Mental Models (Watch First)
 
-Before you code, write a **one-page spec** for each study shot.
+- **How GPUs Actually Work (A Gentle Intro)**  
+  https://www.youtube.com/watch?v=-P28LKWTzrI  
+  Clear explanation of GPU parallelism and why shader cost models differ from CPU code.
 
-### Spec checklist (minimum)
-- **Intent:** what effect should the viewer perceive?
-- **Inputs:** uniforms + ranges + defaults (what is controllable?)
-- **Constraints:** WebGL2 / GLSL ES 3.00, perf/precision assumptions
-- **Acceptance criteria:** how to verify “correct”
-- **Non-goals:** what you will *not* attempt in v1
-
-### Spec templates (copy/paste)
-
-#### Study 01 spec template
-```md
-# Study 01 – Cinematic Post (v1)
-
-Intent:
-- ...
-
-Inputs:
-- uExposure (0..2, default 1)
-- uVignette (0..1, default 0.4)
-- ...
-
-Constraints:
-- WebGL2 / GLSL ES 3.00
-- Avoid branches where possible
-- No heavy multi-sample blur in v1
-
-Acceptance:
-- Vignette darkens corners without crushing midtones
-- Exposure changes are smooth and predictable
-
-Non-goals:
-- LUT-based grading in v1
-```
-
-#### Study 02 spec template
-```md
-# Study 02 – Distant Explosion (v1)
-
-Intent:
-- A brief, emissive explosion in the distant valley that reads as light, not paint.
-
-Inputs:
-- uExplosionPos (vec2)
-- uExplosionStart (float)
-- uExplosionDuration (float)
-- uExplosionMaxRadius (float)
-- uExplosionIntensity (0..2)
-
-Constraints:
-- Explosion is behind foreground silhouettes (mask)
-- Noise affects edge breakup only (avoid global shimmer)
-
-Acceptance:
-- Brightness peaks early (life ~0.1–0.2), then fades
-- Edge is irregular/boiling, not a perfect circle
-- No foreground occlusion failures during the full timeline
-
-Non-goals:
-- No debris simulation
-- No volumetric smoke in v1
-```
-
-#### Study 03 spec template
-```md
-# Study 03 – Rocket Plume (v1)
-
-Intent:
-- A directional plume aligned to the rocket axis, with subtle banding and flicker.
-
-Inputs:
-- uPlumeOrigin (vec2)
-- uPlumeAngle (float radians)
-- uPlumeLength (0..1)
-- uPlumeWidth (0..1)
-- uBandFreq (0..50)
-- uDistortionAmount (0..0.02)
-
-Constraints:
-- Banding should be subtle (no barcode)
-- Distortion (if enabled) must be smooth and low amplitude
-
-Acceptance:
-- Plume aligns with angle and stays stable under parameter changes
-- Flicker reads as energy, not noise
-
-Non-goals:
-- Full fluid simulation
-```
+- **What Happens When a Shader Runs?**  
+  https://www.youtube.com/watch?v=8x4ZbW9b6xk  
+  High-level walkthrough of fragment shader execution per pixel.
 
 ---
 
-## 1. Warm-Up – Shader Comfort – 💡 SHADER · 🧱 ENG
+### Shader Code as Dataflow (IR Thinking)
 
-**Goal:** Know where the shader file is, how to run it, and how not to panic.
+- **Shaders as Dataflow Programs**  
+  https://www.youtube.com/watch?v=Z8w7zP1pG5A  
+  Explains how shaders are best understood as pipelines of operations, not scripts.
 
-### 1.1 Open and poke – 💡 SHADER
-
-- [ ] Open the Study 01 shader (e.g. `study01_*.frag`).  
-- [ ] Find:
-  - [ ] The **main function** (`main()` / `mainImage()` depending on setup)
-  - [ ] The **uniforms** (`uSceneTex`, `uTime`, `uResolution`, etc.)
-  - [ ] The **final color output** line
-
-**Mini exercises – 🧱 ENG**
-- [ ] Change a constant (e.g. vignette strength or exposure).
-- [ ] Recompile / reload and observe what changed.
-- [ ] Add a comment anchor aligned to your spec, e.g. `// spec: vignette` or `// spec: exposure`.
-
-> ✅ When this feels trivial, move on.
+- **Thinking in Terms of Inputs, Outputs, and Transforms**  
+  https://www.youtube.com/watch?v=0ifChJ0nJfM  
+  Reinforces operation ordering and dependency reasoning.
 
 ---
 
-## 2. UV Space & Basic Shapes – 💡 SHADER · 🧮 MATH · 🧵 PAR
+### Cost Models & Optimization (No Premature Tuning)
 
-**Goal:** Be at home in normalized coordinates and simple distance-based shapes.
+- **Why Texture Fetches Are Expensive**  
+  https://www.youtube.com/watch?v=H1y0z7n7tU8  
+  Essential for physical plan reasoning.
 
-### 2.1 See the UVs – 💡 SHADER · 🧮 MATH
-
-In a throwaway or debug shader:
-
-```glsl
-vec2 uv = vUv; // or computed from fragCoord / uResolution
-fragColor = vec4(uv, 0.0, 1.0);
-```
-
-You should see:
-- left = black, right = red
-- bottom = black, top = green
-- a diagonal gradient across the screen
-
-**Mini exercises**
-- [ ] Flip X or Y (`uv.y = 1.0 - uv.y;`)
-- [ ] Zoom UV (`uv *= 2.0;`) and see tiling
-- [ ] Offset UV (`uv += vec2(0.1, 0.0);`)
-
-> 🧵 PAR note: Every pixel runs the same code with different `uv`. No shared state.
-
-### 2.2 Circles & masks – 💡 SHADER · 🧮 MATH
-
-```glsl
-vec2 center = vec2(0.5);
-float dist = length(uv - center);
-```
-
-- [ ] Visualize distance as grayscale.
-- [ ] Create a soft circle with `smoothstep`.
-- [ ] Move the circle with a uniform (e.g. `uCirclePos`).
-
-### 2.3 Apply to Study 02 – 💡 SHADER · 🎨 ART · 🧱 ENG
-
-**Spec checkpoint (NEW):** Ensure your placement/mask work satisfies Study 02 spec constraints.
-
-- [ ] In Study 02, temporarily replace the explosion with a simple circle mask.
-- [ ] Use `uExplosionPos` and `uExplosionMaxRadius` (or equivalent) to place/scale.
-- [ ] Add the circle additively as a faint brightening.
-- [ ] Confirm it appears in the correct region.
-
-**Milestone**
-- [ ] **You can place a soft circle exactly where the spec says the explosion origin is.**
+- **ALU vs Bandwidth on the GPU**  
+  https://www.youtube.com/watch?v=6n8qJw7p7H0  
+  Helps classify shader operations into “cheap” vs “expensive”.
 
 ---
 
-## 3. Color, Blending & Grading – 🎨 ART · 💡 SHADER · 🧮 MATH
+### Precision & Correctness
 
-**Goal:** Choose blending intentionally based on the spec.
+- **Floating Point Precision in Shaders**  
+  https://www.youtube.com/watch?v=E9zYJXgk3pE  
+  Explains why precision qualifiers matter and when they affect correctness.
 
-### 3.1 Solid colors & mix – 🎨 ART · 🧮 MATH
-
-Given mask `m`:
-
-```glsl
-vec3 col = mix(colorA, colorB, m);
-```
-
-- [ ] Try curve shaping: `pow(m, 2.0)`, `sqrt(m)`.
-- [ ] Build a simple 2–3 stop ramp (center → edge).
-
-### 3.2 Additive vs normal blend – 🎨 ART · 💡 SHADER
-
-- [ ] Compare `mix(base, fx, alpha)` vs `base + fx * mask`.
-- [ ] Document which blend mode matches the spec intent (light vs paint).
-
-### 3.3 Apply to Study 02 – 🎨 ART · 💡 SHADER · 🧱 ENG
-
-**Spec checkpoint:** Explosion must read as emissive light.
-
-- [ ] Create a basic fire ramp (white/yellow core → orange/red edge).
-- [ ] Composite additively with modest intensity.
-- [ ] Ensure the plate still reads clearly (no full-frame blowout).
-
-**Milestone**
-- [ ] **Explosion feels emissive and matches the spec’s “light not paint” requirement.**
+- **Why Clamping and Ranges Matter**  
+  https://www.youtube.com/watch?v=JkZs6Fq1P9M  
+  Useful for reasoning about invariants and acceptance criteria.
 
 ---
 
-## 4. Time & Motion – 💡 SHADER · 🧮 MATH · 🧵 PAR
+### How to Use These Resources
 
-**Goal:** Animate via `uTime` and normalized life; treat life curves as a behavioral contract.
+- Watch with a **spec and a plan open**, not a code editor.
+- Pause and translate concepts into:
+  - logical plan steps
+  - physical cost notes
+  - rewrite rules
+- If a video encourages “try it and see” without explanation, it is **out of scope**.
 
-### 4.1 Simple time experiments – 💡 SHADER · 🧮 MATH
-
-```glsl
-float v = 0.5 + 0.5 * sin(uTime);
-```
-
-- [ ] Speed changes: `sin(t * 2.0)` vs `sin(t * 0.1)`.
-- [ ] Pulsing radius and sliding gradients.
-
-### 4.2 Normalized life – 💡 SHADER · 🧮 MATH · 🧱 ENG
-
-```glsl
-float t = max(uTime - uExplosionStart, 0.0);
-float life = clamp(t / uExplosionDuration, 0.0, 1.0);
-```
-
-- [ ] Visualize `life` as grayscale.
-- [ ] Use `life` to drive radius growth.
-- [ ] Use a curve (e.g. `life*(1.0-life)`) to peak intensity mid-early.
-
-### 4.3 Apply to Study 02 – 💡 SHADER · 🎨 ART · 🧱 ENG
-
-**Spec checkpoint:** Brightness peaks early (life ~0.1–0.2), then fades.
-
-- [ ] Grow radius with life.
-- [ ] Peak brightness early; fade by end.
-- [ ] Ensure clean start/end (no lingering glow).
-
-**Milestone**
-- [ ] **Explosion timing is under control and meets the spec’s timeline rules.**
-
----
-
-## 5. Noise & Detail – 💡 SHADER · 🧮 MATH · 🧵 PAR
-
-**Goal:** Break perfect edges into believable texture without global shimmer.
-
-### 5.1 Visualize noise – 💡 SHADER · 🧮 MATH
-
-Use the repo’s noise utility (or a simple hash/value noise). Visualize 0–1.
-
-- [ ] Tune frequency and speed.
-- [ ] Observe aliasing at high frequency.
-
-### 5.2 Noise-modded masks – 💡 SHADER · 🧮 MATH · 🧱 ENG
-
-**Spec rule:** Noise affects *edge breakup* only.
-
-- [ ] Multiply circle edge by noise.
-- [ ] Keep core stable; keep noise bounded.
-- [ ] Tune thresholds to control “wispy vs chunky”.
-
-### 5.3 Apply to Study 02 – 🎨 ART · 💡 SHADER · 🧱 ENG
-
-- [ ] Apply noisy edge to explosion mask.
-- [ ] Verify the edge reads “boiling,” not “sparkly TV static”.
-
-**Milestone**
-- [ ] **Explosion has believable irregular edges and remains stable under motion.**
-
----
-
-## 6. Masks & Compositing (Depth Fake) – 🎨 ART · 💡 SHADER · 🧱 ENG
-
-**Goal:** Hide FX behind foreground elements, consistently.
-
-### 6.1 Visualize the mask – 💡 SHADER
-
-- [ ] Render the mask texture as grayscale to confirm alignment.
-
-### 6.2 Use mask to hide FX – 💡 SHADER · 🎨 ART · 🧱 ENG
-
-- [ ] Composite explosion behind foreground using the mask.
-- [ ] Scrub through the timeline to ensure no occlusion failures.
-
-**Study 02 v1 Milestone**
-- [ ] Timed, growing, noisy, colored explosion
-- [ ] Additive emissive integration
-- [ ] Correct occlusion using the mask
-- [ ] Save “Study 02 v1” (commit + screenshot + parameter notes)
-
----
-
-## 7. Directional FX – Rocket Plume (Study 03) – 💡 SHADER · 🧮 MATH · 🧵 PAR
-
-**Goal:** Reuse fundamentals in a directional coordinate system.
-
-### 7.1 Local axis coordinates – 💡 SHADER · 🧮 MATH
-
-- [ ] Build rotated local space `q` where `q.x` is along-plume.
-- [ ] Visualize `q.x` and `q.y`.
-
-### 7.2 Cone / jet shape – 💡 SHADER · 🧮 MATH
-
-- [ ] Create length and width masks.
-- [ ] Validate that parameters are stable and predictable.
-
-### 7.3 Bands / shock diamonds – 💡 SHADER · 🧮 MATH
-
-- [ ] Add subtle periodic modulation along axis.
-- [ ] Tune to avoid dense banding.
-
-### 7.4 Apply color & animation – 🎨 ART · 💡 SHADER
-
-- [ ] Color ramp along axis (hot near nozzle → cooler far).
-- [ ] Add flicker via noise scrolling along axis.
-
-### 7.5 Heat distortion (stretch) – 💡 SHADER · 🧮 MATH · 🧵 PAR
-
-- [ ] Offset UVs inside plume mask with smooth noise.
-- [ ] Keep distortion small; avoid artifacts.
-
-**Study 03 v1 Milestone**
-- [ ] Plume aligns with `uPlumeAngle`
-- [ ] Width/length feel right for the shot
-- [ ] Flicker and banding are intentional and subtle
-- [ ] Optional distortion is smooth and plausible
-- [ ] Save “Study 03 v1” (commit + screenshot + parameter notes)
-
----
-
-## 8. Suggested Practice Loop – 🧱 ENG · 🧵 PAR
-
-To really own Phase 3:
-
-- [ ] For each new concept, build a **tiny debug shader** that shows it in isolation.
-- [ ] Port the concept into the relevant Study (01/02/03).
-- [ ] Save a versioned screenshot or commit (e.g. `study02_v1`, `study03_v1`).
-- [ ] Change ≤ 2 parameters per run; write down what happened.
-- [ ] Keep asking: “Does each pixel have all the inputs it needs locally?” If yes, you’re designing in a GPU-friendly way.
-
-The point isn’t racing through tasks. It’s moving in **small steps** with **constant visual feedback**, always tying abstract concepts back to one of your **three shots**—and always staying faithful to the spec.
+If you cannot explain an optimization in terms of the **plan**, you are not ready to apply it.

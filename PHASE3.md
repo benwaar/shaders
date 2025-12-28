@@ -1,176 +1,199 @@
-## Phase 3 — Spec-to-Plan (IR) & EXPLAIN Reports
+## Phase 2 — Specs for Simple Effects
 
-**Goal:** learn to derive an explicit, inspectable **execution plan** from a shader spec,
-analogous to a SQL logical + physical execution plan.
-
-This phase introduces a **mandatory middle layer**:
-
-> **Spec → Logical Plan (IR) → Physical Plan → Shader Code**
-
-No GLSL is written in this phase without first producing a plan.
+**Goal:** build a small, well-understood set of shader effects, progressing from fully deterministic behavior to controlled time-based variation.
 
 All shaders in this phase:
-- already have a **locked or near-locked spec** (from Phase 2)
-- produce a **Derived Plan** artifact before implementation or refactor
-- can be reasoned about in terms of cost, precision, and correctness *without reading code*
+- are written **from a spec first**
+- default to **neutral output** (no visible effect)
+- introduce **one new concept at a time**
+- are verified and locked before moving on
 
----
+### 2.1 Solid Tint
 
-### 3.1 Logical Plan (Shader IR)
+**Purpose:** establish the simplest possible color modification.
 
-**Purpose:** make the “what happens” explicit, independent of GLSL syntax.
-
-For each shader, derive a **Logical Plan** consisting of:
-- ordered operations (e.g. sample → transform → mix → clamp)
-- data dependencies between operations
-- invariants tied back to spec clauses
-
-Example (conceptual):
-- sample input texture
-- compute UV-based distance
-- apply falloff function
-- blend with original color
-- clamp output
+- Uniform color tint with controllable strength
+- No spatial variation
+- No noise
+- No time dependence
 
 Introduces:
-- shader-as-dataflow thinking
-- operation ordering as semantics
-- separation of intent from implementation
+- color multiplication
+- strength blending
+- neutral defaults
 
 ---
 
-### 3.2 Physical Plan (Cost & Precision)
+### 2.2 Brightness / Contrast
 
-**Purpose:** reason about *how* the logical plan executes on the GPU.
+**Purpose:** add deterministic color transformation without spatial or temporal logic.
 
-For each logical plan, derive:
-- texture fetch count
-- ALU-heavy operations (distance, trig, noise)
-- precision requirements (highp vs mediump)
-- coordinate space assumptions
-- obvious performance risks
-
-This is the shader equivalent of a **physical execution plan**.
+- Uniform brightness and contrast adjustment
+- Predictable, monotonic parameter behavior
+- No spatial variation
+- No time dependence
 
 Introduces:
-- cost awareness without premature optimization
-- precision as a design constraint
-- GPU execution mental model
+- linear color remapping
+- parameterized intensity control
 
 ---
 
-### 3.3 Rewrite Rules (Safe Optimizations)
+### 2.3 Vignette
 
-**Purpose:** define which transformations are allowed *without changing spec semantics*.
+**Purpose:** introduce spatial falloff while keeping behavior static and predictable.
 
-Examples:
-- constant folding (neutral defaults eliminate branches)
-- clamp merging or hoisting
-- sample reuse (avoid double sampling)
-- replacing expensive ops with equivalent forms (when spec allows)
-
-Rules:
-- rewrites must be justified by **spec invariants**
-- rewrites are documented, not implicit
-- if a rewrite changes behavior, the spec must change
+- Radial or screen-space falloff from a defined center
+- Adjustable radius and softness
+- No time dependence
+- No noise
 
 Introduces:
-- semantics-preserving optimization
-- refactoring under contract
-- explicit optimizer rules
+- UV-based spatial reasoning
+- distance-based attenuation
 
 ---
 
-### 3.4 EXPLAIN Report
+### 2.4 Scanlines
 
-**Purpose:** make the derivation auditable and teachable.
+**Purpose:** introduce periodic patterns in screen space.
 
-Each shader produces an **EXPLAIN-style report** that includes:
-- spec clause → logical plan node mapping
-- logical plan → physical cost notes
-- applied (or allowed) rewrites
-- integration risks (gamma, premultiplied alpha, resolution scaling)
-
-This artifact should let someone understand the shader **without reading GLSL**.
+- Static scanline pattern
+- Adjustable density and strength
+- Stable frame-to-frame
+- No time dependence
 
 Introduces:
-- explainability as a first-class deliverable
-- reviewable shader design
-- shared vocabulary for discussion and optimization
+- periodic functions
+- screen-space frequency control
 
 ---
 
-### Exit criteria for Phase 3
+### 2.5 Grain
 
-- You can predict texture samples and major cost drivers from the plan alone.
-- Two different GLSL implementations can share the same plan and verified behavior.
-- You can propose optimizations *before* writing code.
-- Shader behavior is explainable in the same way a SQL query plan is explainable.
+**Purpose:** introduce noise while preserving determinism.
 
----
+- Procedural noise with explicit seed
+- Adjustable grain size and strength
+- Deterministic output for a fixed seed
+- No time-based animation
 
-## Resources — Companion Videos (Phase 3)
-
-These resources focus on **mental models, execution, and compilation** rather than visual effects.
-They are best watched while **writing plans**, not code.
-
----
-
-### GPU & Shader Execution Mental Models (Watch First)
-
-- **How GPUs Actually Work (A Gentle Intro)**  
-  https://www.youtube.com/watch?v=-P28LKWTzrI  
-  Clear explanation of GPU parallelism and why shader cost models differ from CPU code.
-
-- **What Happens When a Shader Runs?**  
-  https://www.youtube.com/watch?v=8x4ZbW9b6xk  
-  High-level walkthrough of fragment shader execution per pixel.
+Introduces:
+- noise functions
+- controlled randomness
 
 ---
 
-### Shader Code as Dataflow (IR Thinking)
+### 2.6 Flicker
 
-- **Shaders as Dataflow Programs**  
-  https://www.youtube.com/watch?v=Z8w7zP1pG5A  
-  Explains how shaders are best understood as pipelines of operations, not scripts.
+**Purpose:** introduce time as an input in a controlled, bounded way.
 
-- **Thinking in Terms of Inputs, Outputs, and Transforms**  
-  https://www.youtube.com/watch?v=0ifChJ0nJfM  
-  Reinforces operation ordering and dependency reasoning.
+- Time-driven intensity variation
+- Adjustable rate and strength
+- Predictable, bounded output
+- No spatial noise unless explicitly specified
 
----
-
-### Cost Models & Optimization (No Premature Tuning)
-
-- **Why Texture Fetches Are Expensive**  
-  https://www.youtube.com/watch?v=H1y0z7n7tU8  
-  Essential for physical plan reasoning.
-
-- **ALU vs Bandwidth on the GPU**  
-  https://www.youtube.com/watch?v=6n8qJw7p7H0  
-  Helps classify shader operations into “cheap” vs “expensive”.
+Introduces:
+- temporal inputs
+- time-based modulation
 
 ---
 
-### Precision & Correctness
+**Exit criteria for Phase 2:**
+- Each effect has a locked spec
+- Behavior is predictable from the spec alone
+- No shader relies on undocumented constants or side effects
 
-- **Floating Point Precision in Shaders**  
-  https://www.youtube.com/watch?v=E9zYJXgk3pE  
-  Explains why precision qualifiers matter and when they affect correctness.
+---
 
-- **Why Clamping and Ranges Matter**  
-  https://www.youtube.com/watch?v=JkZs6Fq1P9M  
-  Useful for reasoning about invariants and acceptance criteria.
+## Resources — Companion Videos (Phase 2)
+
+These videos support the **technical building blocks** introduced in Phase 2.
+They focus on simple, explainable shader behaviors rather than complex visual effects.
+
+They are best watched **alongside writing specs**, not as step-by-step tutorials.
+
+---
+
+### General Shader Fundamentals (Watch First)
+
+- **What Is a Fragment Shader? (Inigo Quilez – Short Intro)**  
+  https://www.youtube.com/watch?v=f4s1h2YETNY  
+  A clear explanation of what fragment shaders do, focused on per-pixel behavior.
+
+- **Fragment Shaders Explained Simply**  
+  https://www.youtube.com/watch?v=GMHcI3p2qvA  
+  A beginner-friendly overview of how fragment shaders transform color values.
+
+---
+
+### Color Manipulation (Solid Tint, Brightness / Contrast)
+
+- **Color Manipulation in Shaders (Brightness & Contrast)**  
+  https://www.youtube.com/watch?v=YkU2m9Z7n5M  
+  Demonstrates linear color remapping concepts relevant to brightness and contrast.
+
+- **Understanding Color Multiplication**  
+  https://www.youtube.com/watch?v=9s5A9pIuM4o  
+  Explains how multiplying colors affects output — directly applicable to tint shaders.
+
+---
+
+### Spatial Reasoning (Vignette)
+
+- **UV Coordinates Explained**  
+  https://www.youtube.com/watch?v=rgdYx4ZrL0g  
+  A practical explanation of UV space, essential for vignette and screen-space effects.
+
+- **Distance Functions in Shaders**  
+  https://www.youtube.com/watch?v=Pm3FzZr1L5I  
+  Introduces distance-based attenuation, useful for radial falloff.
+
+---
+
+### Periodic Patterns (Scanlines)
+
+- **Sine Waves and Periodic Functions Explained**  
+  https://www.youtube.com/watch?v=Zb0tJ7vN4Ow  
+  A simple explanation of sine waves and frequency — useful for scanline patterns.
+
+- **Screen-Space Effects Basics**  
+  https://www.youtube.com/watch?v=9M4yQzQFz4U  
+  Discusses effects tied to screen coordinates rather than object space.
+
+---
+
+### Noise & Randomness (Grain)
+
+- **What Is Noise in Shaders?**  
+  https://www.youtube.com/watch?v=Qf1p2N6S6kA  
+  Explains procedural noise at a conceptual level without diving into heavy math.
+
+- **Hash Functions for Simple Noise**  
+  https://www.youtube.com/watch?v=J9kB2M3mX6k  
+  Introduces deterministic “randomness” using hash-style functions.
+
+---
+
+### Time as an Input (Flicker)
+
+- **Time-Based Animation in Shaders (Basics)**  
+  https://www.youtube.com/watch?v=GZ4Y9w0EwZc  
+  Shows how time is typically used as an input, without complex animation systems.
+
+- **Controlling Oscillation with Time**  
+  https://www.youtube.com/watch?v=8g8g4SxqX6E  
+  Useful for understanding bounded, predictable flicker behavior.
 
 ---
 
 ### How to Use These Resources
 
-- Watch with a **spec and a plan open**, not a code editor.
-- Pause and translate concepts into:
-  - logical plan steps
-  - physical cost notes
-  - rewrite rules
-- If a video encourages “try it and see” without explanation, it is **out of scope**.
+- Watch selectively — not all videos are required.
+- Focus on **concepts**, not copying code.
+- Translate what you learn into:
+  - clearer specs
+  - better acceptance criteria
+  - simpler implementations
 
-If you cannot explain an optimization in terms of the **plan**, you are not ready to apply it.
+If a video introduces behavior you cannot specify clearly, it is **out of scope** for Phase 2.

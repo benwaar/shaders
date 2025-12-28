@@ -1,12 +1,99 @@
 # 🎨 Visual Language & Spec-Driven Shader Engineering (Flutter Focus)
 
-This repository explores how **visual language in film** can inspire **spec-driven shader design** for 2D games — focusing on deterministic visual behavior (emotion, color, texture) rather than 3D realism.
+This repository is a **foundational study in spec-driven engineering**, using
+**2D fragment shaders** as a deterministic substrate.
 
-Shaders here are treated as **small, constrained programs authored against explicit visual specifications**, not ad-hoc visual experiments.
+It explores how **visual language** (inspired by film, print, and UI design)
+can be expressed as **explicit, testable specifications**, then compiled into
+small, predictable shader programs for Flutter applications.
 
-This project approaches film references as visual systems to be analyzed, not styles to be copied. Many “film-inspired” shader workflows take one of two common routes: an art-first approach that tries to replicate a look through descriptive labels and aesthetic tweaking (“make it more cinematic,” “more gritty,” “like Blade Runner”), or a math-first approach that builds effects from known techniques (noise, blur, bloom, LUTs) and hopes the result lands emotionally. Both can produce good images, but they often struggle with repeatability: intent gets fuzzy, parameters behave unpredictably, and integration into a real UI quietly changes the effect. Here, we treat a film still like a reference implementation: we identify the variables, invariants, constraints, and acceptance checks that make the image read the way it does, then encode those behaviors into a spec before writing any GLSL. The goal isn’t resemblance — it’s deterministic behavior that preserves meaning when reused, refactored, and shipped inside interactive 2D worlds.
+Shaders here are treated as **constrained programs authored against contracts** —
+not ad-hoc visual experiments, not style imitation, and not math demos.
 
-> _“Studying how cinematic imagery can live inside interactive flat worlds — deliberately and repeatably.”_
+> _“This repository is about learning how intent becomes execution.”_
+
+---
+
+## 🎯 Learning Objectives
+
+By the end of this study, you should be able to:
+
+- Write **clear, enforceable specs** for visual behavior  
+- Distinguish **intent, specification, plan, execution, and integration**
+- Predict shader behavior **before writing GLSL**
+- Explain shader behavior **without reading the code**
+- Refactor or optimize shaders **without changing semantics**
+- Diagnose failures as:
+  - spec errors
+  - implementation defects
+  - integration mistakes
+
+This repository deliberately prioritizes:
+
+**correctness · explainability · repeatability · reuse**
+
+over novelty or visual flash.
+
+---
+
+### Shared Language & Definitions
+
+This project uses a precise, shared vocabulary for terms like **spec**, **plan**,
+**execution**, **authority**, and **verification**.
+
+These terms are defined once and reused across all related projects:
+
+👉 **[FOUNDATIONS.md — Shared Language & Mental Models](docs/FOUNDATIONS.md)**
+
+If a term is not defined there, it should not be used casually elsewhere.
+
+---
+
+## 🧠 From Prompts to Specs (Context, Not a Dependency)
+
+Many engineers encounter *prompt-based systems* before they encounter
+**spec-driven systems**.
+
+This project intentionally reframes that experience:
+
+- A **prompt** is an instruction.
+- A **spec** is a contract.
+
+Prompts are useful for exploring intent, but **specs are required** when behavior
+must be:
+
+- reproducible  
+- verifiable  
+- optimizable  
+- safe to refactor  
+
+Some early exploration in this study involved prompt-style thinking, but all
+durable lessons have been **formalized into explicit specifications**.
+
+No prior “AI art” or prompt-engineering project is required to use this repository.
+The only assumption is comfort expressing intent in natural language.
+
+---
+
+## 🧱 Spec Discipline (K.E.R.N.E.L)
+
+All shader work in this repository follows **K.E.R.N.E.L**, used here as a
+**general engineering discipline**, not a creative trick:
+
+- **Keep it simple** — one visual objective per shader  
+- **Easy to verify** — pass/fail acceptance criteria required  
+- **Reproducible** — all inputs have defaults; no hidden constants  
+- **Narrow scope** — non-goals are explicit  
+- **Explicit constraints** — platform, precision, performance stated  
+- **Logical structure** — specs follow a consistent section order  
+
+If a shader cannot be verified against its spec, it is considered **incomplete**.
+
+K.E.R.N.E.L exists to:
+- control scope
+- prevent drift
+- enable safe refactoring
+- support future automation
 
 ---
 
@@ -16,33 +103,18 @@ Every shader in this repository is written **from a spec first**.
 
 The workflow is:
 
-**Film Reference → Visual Spec → Shader Spec → Implementation → Flutter Integration → Verification**
+**Visual Reference → Visual Spec → Shader Spec → Plan → Implementation → Flutter Integration → Verification**
 
 A shader spec defines:
-- **Intent** — the visual or emotional effect being targeted
-- **Inputs** — uniforms, ranges, defaults, interaction points
-- **Constraints** — platform (WebGL2 / GLSL ES 3.00), precision, performance
-- **Acceptance Criteria** — how to tell the shader is “working”
-- **Non-goals** — what is explicitly not being attempted
 
-Iteration refines the **implementation**; the **spec only changes when intent changes** and must pass a defined spec gate before coding begins.
+- **Intent** — the visual or emotional behavior being targeted  
+- **Inputs** — uniforms, ranges, defaults, interaction points  
+- **Constraints** — platform (WebGL2 / GLSL ES 3.00), precision, performance  
+- **Acceptance Criteria** — how to tell the shader is “working”  
+- **Non-goals** — what is explicitly not being attempted  
 
----
-
-## 🧱 Spec Discipline (K.E.R.N.E.L)
-
-All shader work in this repository follows **K.E.R.N.E.L** principles:
-
-- **Keep it simple** — one visual objective per shader
-- **Easy to verify** — pass/fail acceptance criteria required
-- **Reproducible** — all inputs have defaults; no hidden constants
-- **Narrow scope** — non-goals are explicit
-- **Explicit constraints** — platform, precision, performance stated
-- **Logical structure** — specs follow a consistent section order
-
-If a shader cannot be verified against its spec, it is considered incomplete.
-This repository prioritizes correctness, predictability, and reuse over novelty.
-
+The **spec is the source of truth**.  
+Implementation may change; behavior may not.
 
 ---
 
@@ -69,13 +141,16 @@ Visual Reference Analysis
 
 ## 📘 Study Plan
 
-This repository follows a **structured, spec-led study path**.
+👉 **[FOUNDATIONS.md — Shared Language & Mental Models](docs/FOUNDATIONS.md)**
+👉 **[STUDY_PLAN.md](STUDY_PLAN.md)** — overall structure and rules  
 
 Continue from the current phase here:  
-👉 **[STUDY_PLAN.md](STUDY_PLAN.md)** — overall structure and rules  
-👉 **[PHASE0.md](PHASE0.md)** — setup for specs and graphics  
-👉 **[PHASE1.md](PHASE1.md)** — spec foundations and spec gate  
-👉 **[PHASE2.md](PHASE2.md)** — simple effect specs (building blocks)
+👉 **[PHASE0.md](PHASE0.md)** — spec-driven engineering foundations & early gotchas  
+👉 **[PHASE1.md](PHASE1.md)** — repository setup & spec scaffolding  
+👉 **[PHASE2.md](PHASE2.md)** — spec foundations & spec gate  
+👉 **[PHASE3.md](PHASE3.md)** — simple effect specs (skill ladder)  
+👉 **[PHASE4.md](PHASE4.md)** — spec-to-plan (IR) & EXPLAIN reasoning  
+👉 **[PHASE5.md](PHASE5.md)** — cross-shader conventions & shared semantics
 
 Progression is gated by **spec clarity**, not visual flash.  
 Shaders are not implemented unless their specs meet minimum verification criteria.

@@ -1,199 +1,217 @@
-## Phase 2 — Specs for Simple Effects
+# Phase 1 — Spec Foundations
 
-**Goal:** build a small, well-understood set of shader effects, progressing from fully deterministic behavior to controlled time-based variation.
+**Goal:** learn to write enforceable shader specifications before touching GLSL.
 
-All shaders in this phase:
-- are written **from a spec first**
-- default to **neutral output** (no visible effect)
-- introduce **one new concept at a time**
-- are verified and locked before moving on
+This phase establishes the **discipline, structure, and verification rules** that govern all shader work in this repository.
 
-### 2.1 Solid Tint
-
-**Purpose:** establish the simplest possible color modification.
-
-- Uniform color tint with controllable strength
-- No spatial variation
-- No noise
-- No time dependence
-
-Introduces:
-- color multiplication
-- strength blending
-- neutral defaults
+No shader code is written in this phase.
 
 ---
 
-### 2.2 Brightness / Contrast
+## What This Phase Is (and Is Not)
 
-**Purpose:** add deterministic color transformation without spatial or temporal logic.
+### This phase is:
+- about **clarity of intent**
+- about **explicit constraints**
+- about **verifiable behavior**
+- about writing specs as **contracts**
 
-- Uniform brightness and contrast adjustment
-- Predictable, monotonic parameter behavior
-- No spatial variation
-- No time dependence
+### This phase is not:
+- about visual quality
+- about implementation details
+- about experimentation
+- about optimization
 
-Introduces:
-- linear color remapping
-- parameterized intensity control
-
----
-
-### 2.3 Vignette
-
-**Purpose:** introduce spatial falloff while keeping behavior static and predictable.
-
-- Radial or screen-space falloff from a defined center
-- Adjustable radius and softness
-- No time dependence
-- No noise
-
-Introduces:
-- UV-based spatial reasoning
-- distance-based attenuation
+If something cannot be specified clearly, it is not ready to be implemented.
 
 ---
 
-### 2.4 Scanlines
+## Required Spec Structure
 
-**Purpose:** introduce periodic patterns in screen space.
+Every shader spec **must** include the following sections, in this order:
 
-- Static scanline pattern
-- Adjustable density and strength
-- Stable frame-to-frame
-- No time dependence
+1. **Objective**  
+   One sentence describing what the shader exists to do.
 
-Introduces:
-- periodic functions
-- screen-space frequency control
+2. **Intent**  
+   A description of what the viewer should perceive.  
+   Focus on observable behavior, not implementation.
 
----
+3. **Inputs**  
+   All external controls, each with:
+   - name
+   - type
+   - range
+   - default value
 
-### 2.5 Grain
+   No hidden constants are allowed.
 
-**Purpose:** introduce noise while preserving determinism.
+4. **Constraints**  
+   Explicit limits on:
+   - platform (e.g. WebGL2 / GLSL ES 3.00)
+   - performance expectations
+   - precision requirements (if relevant)
 
-- Procedural noise with explicit seed
-- Adjustable grain size and strength
-- Deterministic output for a fixed seed
-- No time-based animation
+5. **Non-Goals**  
+   A clear list of what the shader explicitly does *not* attempt to do.
 
-Introduces:
-- noise functions
-- controlled randomness
+6. **Acceptance Criteria**  
+   Pass/fail checks that determine whether the shader satisfies the spec.
 
----
+7. **Spec Status**  
+   One of:
+   - `DRAFT` — intent still evolving
+   - `LOCKED` — behavior must not change
 
-### 2.6 Flicker
-
-**Purpose:** introduce time as an input in a controlled, bounded way.
-
-- Time-driven intensity variation
-- Adjustable rate and strength
-- Predictable, bounded output
-- No spatial noise unless explicitly specified
-
-Introduces:
-- temporal inputs
-- time-based modulation
+Specs that do not follow this structure are invalid.
 
 ---
 
-**Exit criteria for Phase 2:**
-- Each effect has a locked spec
-- Behavior is predictable from the spec alone
-- No shader relies on undocumented constants or side effects
+## Writing Rules
+
+When writing specs in this phase:
+
+- Use **concrete, testable language**
+- Avoid aesthetic adjectives without behavioral meaning
+- Do not describe *how* the shader is implemented
+- Do not reference GLSL functions, math tricks, or algorithms
+- Assume the reader has no access to your intuition
+
+If behavior cannot be verified, it must be clarified or removed.
 
 ---
 
-## Resources — Companion Videos (Phase 2)
+## Acceptance Criteria Guidelines
 
-These videos support the **technical building blocks** introduced in Phase 2.
-They focus on simple, explainable shader behaviors rather than complex visual effects.
+Acceptance criteria must be:
 
-They are best watched **alongside writing specs**, not as step-by-step tutorials.
+- objective (pass/fail)
+- observable in the player
+- independent of personal taste
 
----
+Examples:
+- “With all inputs at default values, output matches input.”
+- “Changing `uStrength` from 0 to 1 increases effect monotonically.”
+- “Setting strength to 0 produces no visible change.”
 
-### General Shader Fundamentals (Watch First)
-
-- **What Is a Fragment Shader? (Inigo Quilez – Short Intro)**  
-  https://www.youtube.com/watch?v=f4s1h2YETNY  
-  A clear explanation of what fragment shaders do, focused on per-pixel behavior.
-
-- **Fragment Shaders Explained Simply**  
-  https://www.youtube.com/watch?v=GMHcI3p2qvA  
-  A beginner-friendly overview of how fragment shaders transform color values.
-
----
-
-### Color Manipulation (Solid Tint, Brightness / Contrast)
-
-- **Color Manipulation in Shaders (Brightness & Contrast)**  
-  https://www.youtube.com/watch?v=YkU2m9Z7n5M  
-  Demonstrates linear color remapping concepts relevant to brightness and contrast.
-
-- **Understanding Color Multiplication**  
-  https://www.youtube.com/watch?v=9s5A9pIuM4o  
-  Explains how multiplying colors affects output — directly applicable to tint shaders.
+Avoid:
+- “Looks correct”
+- “Feels cinematic”
+- “Seems subtle enough”
 
 ---
 
-### Spatial Reasoning (Vignette)
+## Spec Gate (Mandatory)
 
-- **UV Coordinates Explained**  
-  https://www.youtube.com/watch?v=rgdYx4ZrL0g  
-  A practical explanation of UV space, essential for vignette and screen-space effects.
+A spec may proceed to implementation **only if all checks pass**:
 
-- **Distance Functions in Shaders**  
-  https://www.youtube.com/watch?v=Pm3FzZr1L5I  
-  Introduces distance-based attenuation, useful for radial falloff.
+- [ ] The spec has exactly one objective
+- [ ] At least two acceptance criteria are defined
+- [ ] All inputs include ranges and default values
+- [ ] Non-goals are explicitly listed
+- [ ] Platform and performance constraints are stated
+- [ ] Sections appear in the standard order
+- [ ] Spec Status is set
 
----
-
-### Periodic Patterns (Scanlines)
-
-- **Sine Waves and Periodic Functions Explained**  
-  https://www.youtube.com/watch?v=Zb0tJ7vN4Ow  
-  A simple explanation of sine waves and frequency — useful for scanline patterns.
-
-- **Screen-Space Effects Basics**  
-  https://www.youtube.com/watch?v=9M4yQzQFz4U  
-  Discusses effects tied to screen coordinates rather than object space.
+Failing the gate means the spec must be revised before any code is written.
 
 ---
 
-### Noise & Randomness (Grain)
+## Output of Phase 1
 
-- **What Is Noise in Shaders?**  
-  https://www.youtube.com/watch?v=Qf1p2N6S6kA  
-  Explains procedural noise at a conceptual level without diving into heavy math.
+You are done with Phase 1 when you can:
 
-- **Hash Functions for Simple Noise**  
-  https://www.youtube.com/watch?v=J9kB2M3mX6k  
-  Introduces deterministic “randomness” using hash-style functions.
+- write a complete shader spec without referencing code
+- predict shader behavior from the spec alone
+- identify ambiguities before implementation
+- reject unclear specs instead of “fixing” them in code
 
----
-
-### Time as an Input (Flicker)
-
-- **Time-Based Animation in Shaders (Basics)**  
-  https://www.youtube.com/watch?v=GZ4Y9w0EwZc  
-  Shows how time is typically used as an input, without complex animation systems.
-
-- **Controlling Oscillation with Time**  
-  https://www.youtube.com/watch?v=8g8g4SxqX6E  
-  Useful for understanding bounded, predictable flicker behavior.
+Only after this phase should you proceed to Phase 2.
 
 ---
 
-### How to Use These Resources
+## Reminder
 
-- Watch selectively — not all videos are required.
-- Focus on **concepts**, not copying code.
-- Translate what you learn into:
-  - clearer specs
-  - better acceptance criteria
-  - simpler implementations
+> **If it isn’t verifiable, it isn’t a spec.**
 
-If a video introduces behavior you cannot specify clearly, it is **out of scope** for Phase 2.
+---
+
+## Resources — Companion Videos (Phase 1)
+
+These videos support the **spec-first, behavior-driven mindset** required in Phase 1.
+They are not shader tutorials; they focus on intent, verification, and defining “done.”
+
+- **How to Write Acceptance Tests**  
+  https://www.youtube.com/watch?v=JDD5EEJgpHU  
+  Introduces acceptance criteria as pass/fail checks rather than subjective judgment.
+
+- **Acceptance Testing with Executable Specifications**  
+  https://www.youtube.com/watch?v=knB4jBafR_M  
+  Explores the idea of specifications as enforceable contracts between intent and implementation.
+
+- **Hello, Spec-Driven Development**  
+  https://www.youtube.com/watch?v=it2PI_EwEYM  
+  A high-level introduction to writing specs before code and why this improves clarity and outcomes.
+
+- **Requirements vs User Stories**  
+  https://www.youtube.com/watch?v=KP0U3I-f9-Y  
+  Useful background on distinguishing intent, requirements, and implementation details.
+
+These resources are intended to be watched selectively and revisited as needed.
+They reinforce *how to think*, not *what to code*.
+
+---
+
+# Next steps
+
+### 1. Reconfirm the Vertex / Fragment Mental Model
+
+- Write down (in your own words) a 2–3 sentence summary:
+  - Both vertex shaders you’ve seen (the “derive UV from position” version and the “pass through a_texCoord” version) **serve the same role** in this project:  
+    they output a `v_texCoord` in the range `[0..1]` and a `gl_Position` that covers the full screen.
+  - For the **Solid Tint** shader, the fragment stage only cares that:
+    - `v_texCoord` runs from `(0,0)` in one corner to `(1,1)` in the opposite corner
+    - every pixel gets a valid UV
+  - How the vertex shader *computes* `v_texCoord` is an implementation detail, as long as that contract holds.
+
+This locks in the idea that the **spec is about fragment behavior and UV semantics**, not the exact vertex math.
+
+---
+
+### 2. Adjust the Solid Tint Spec (UV & Vertex-Agnostic Contract)
+
+Update the Solid Tint spec so it is clearly compatible with **both** vertex variants.
+
+- In **Constraints**, add a short “UV semantics” note, for example:
+
+  > **UV Space Assumption:**  
+  > The fragment shader receives `v_texCoord` in the range `[0.0, 1.0]` in both components,  
+  > where `(0,0)` maps to one corner of the image and `(1,1)` to the opposite corner.  
+  > The exact vertex shader used to generate `v_texCoord` is outside the scope of this spec.
+
+- Optionally add one Acceptance Criterion, e.g.:
+
+  5. **UV coverage:** For any valid input image, the shader must sample only within the `[0,1]` UV range (no obvious wrapping or mirroring artifacts introduced by the tint logic).
+
+This keeps the spec **vertex-agnostic**, but explicit about what the fragment expects.
+
+---
+
+### 3. Code Walkthrough & Annotation
+
+Do a line-by-line pass through the actual code you have:
+
+1. **Vertex shader(s)**  
+   - Take each vertex shader you might use (the passthrough one, the current `VERT_SRC`, etc.).  
+   - Add comments (in the file or in a notes doc) marking:
+     - which lines are **plumbing** (setting `gl_Position`, passing through UVs)
+     - which lines you would ever change for an effect (likely none, for now)
+
+2. **`solid_tint.frag`**  
+   - Annotate:
+     - where the **input** comes in (`texture(uTexture, vTexCoord)`)
+     - where the **effect** happens (tint multiply)
+     - where **blending** happens (`mix(src, tinted, s)`)
+   - For each acceptance criterion in the spec, write a small note:
+     - which line(s) of code make that criterion true
+     - or what you would need to change if it ever fails
