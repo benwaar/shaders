@@ -24,13 +24,11 @@ No spec is changed without intent changing.
 
 ## Core Loop
 
-Reference → Visual Spec → Shader Spec → Implementation → Integration → Verification
-
+Reference → Visual Spec → Shader Spec → Plan (IR) → Implementation → Integration → Verification
 
 ---
 
-# Phase 0 — Spec driven engineering introduction
-
+# Phase 0 — Foundations, Mental Models & Early Gotchas
 
 This phase establishes the **mental model and discipline** used throughout the study.
 
@@ -57,7 +55,7 @@ All later phases assume this shared foundation and terminology.
 - manifest-driven shader discovery (`shaders/manifest.json`)
 - player assumptions documented (how uniforms/time/resolution are provided)
 
-👉 See full detail in [`PHASE0.md`](PHASE0.md)
+👉 See full detail in [`PHASE1.md`](PHASE1.md)
 
 **Exit criteria**
 - You can add a shader/spec pair without “mystery edits”
@@ -88,7 +86,7 @@ A shader may not be implemented unless its spec passes the Spec Gate.
 - Platform and performance constraints stated
 - Standard section order followed
 
-👉 See full detail in [`PHASE1.md`](PHASE1.md)
+👉 See full detail in [`PHASE2.md`](PHASE2.md)
 
 **Exit criteria**
 - You can write specs without referencing implementation
@@ -109,7 +107,7 @@ Each effect is specified, implemented, verified, and locked before moving on.
 - **Grain** — deterministic noise via explicit seed  
 - **Flicker** — controlled, time-based intensity variation (last)
 
-👉 See full detail in [`PHASE2.md`](PHASE2.md)
+👉 See full detail in [`PHASE3.md`](PHASE3.md)
 
 **Exit criteria**
 - Each shader has a spec and a passing implementation in the player
@@ -166,8 +164,6 @@ Rules:
 - no implementation thinking
 
 Deliverable: engineering-grade visual specs.
-
-👉 (Optional) Put details in `PHASE4.md` when you’re ready.
 
 **Exit criteria**
 - You can produce a visual spec that lists variables, invariants, and constraints

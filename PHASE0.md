@@ -1,6 +1,6 @@
 # Phase 0 — Foundations, Mental Models & Early Gotchas
 
-**Goal:** establish shared mental models and avoid common failure modes
+*Goal:* establish shared mental models and avoid common failure modes
 *before* writing specs or shader code.
 
 This phase is about **how to think**, not what to build.
@@ -107,6 +107,29 @@ All work in this study follows **K.E.R.N.E.L**:
 - **L – Logical structure**: specs follow a consistent section order  
 
 If a shader cannot be verified against its spec, it is **incomplete**.
+
+---
+
+## 0.10 ⚠️ **Warning: Over-Specifying Too Early**
+
+A spec should constrain **behavior**, not freeze **implementation**.
+
+Common early failure modes:
+- encoding formulas instead of invariants
+- specifying execution order prematurely
+- optimizing before behavior is well understood
+- locking details that should remain flexible
+
+If changing the implementation *without changing behavior* feels impossible,
+the spec is likely too prescriptive.
+
+Prefer:
+- observable guarantees
+- bounded ranges
+- equivalence rules
+
+Defer optimization and low-level decisions until the **Spec-to-Plan (IR)** phase.
+This warning reinforces **K.E.R.N.E.L → Keep it simple**.
 
 ---
 
