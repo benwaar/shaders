@@ -1,5 +1,7 @@
 ### Lesson: STYLE vs LIGHTING in Fintech Data Owl
 
+Fin Tech Owl [https://www.instagram.com/p/DSYJ4CtCD0a/](https://www.instagram.com/p/DSYJ4CtCD0a/)
+
 A → B (STYLE + COLOR)
 - STYLE change to “modern fintech corporate illustration” made edges and shapes feel sharper and more deliberate.
 - The layout kept the same geometry, but the image read more like real brand art: vector-like, structured, “designed”.
