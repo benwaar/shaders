@@ -141,7 +141,7 @@ Visual Reference Analysis
 
 ## 📘 Study Plan
 
-👉 **[FOUNDATIONS.md — Shared Language & Mental Models](docs/FOUNDATIONS.md)**
+👉 **[FOUNDATIONS.md — Shared Language & Mental Models](docs/FOUNDATIONS.md)**  
 👉 **[STUDY_PLAN.md](STUDY_PLAN.md)** — overall structure and rules  
 
 Continue from the current phase here:  
