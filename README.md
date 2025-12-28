@@ -67,8 +67,11 @@ must be:
 - optimizable  
 - safe to refactor  
 
-Some early exploration in this study involved prompt-style thinking, but all
-durable lessons have been **formalized into explicit specifications**.
+Some early exploration in this work involved prompt-style thinking.
+Those experiments are now **archived for reference only** in [docs/art-prompts-to-specs/ART_PROMPT_TO_SPECS_STUDY.md](docs/art-prompts-to-specs/ART_PROMPT_TO_SPECS_STUDY.md).
+
+All durable lessons have been **formalized into explicit specifications** and
+integrated into the study itself.
 
 No prior “AI art” or prompt-engineering project is required to use this repository.
 The only assumption is comfort expressing intent in natural language.
