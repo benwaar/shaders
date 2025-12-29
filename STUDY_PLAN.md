@@ -30,6 +30,12 @@ Browser-first gate: All primitive shaders and Applied Shader Projects A–E must
 
 ---
 
+## Why This Looks Like a Full Course
+
+This study is intentionally structured like a university-level course because it is teaching systems engineering discipline, not just shader tricks. Each shader serves as a concrete vehicle for learning how to define behavior precisely, reason about cost and determinism, integrate safely, and maintain correctness over time. The phases separate concerns that are often collapsed in practice — specification, planning, execution, verification, and maintenance — which is why the shader count is small but the depth is high. This structure exists to prevent the common “cool effect → confusion” failure mode and replace it with a repeatable, teachable workflow that scales beyond graphics.
+
+---
+
 ## Capstone Shaders (Built Incrementally)
 
 This study produces **three capstone shaders**.
