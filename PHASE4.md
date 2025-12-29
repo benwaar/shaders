@@ -1,4 +1,4 @@
-## Phase 3 — Spec-to-Plan (IR) & EXPLAIN Reports
+## Phase 4 — Spec-to-Plan (IR) & EXPLAIN Reports
 
 **Goal:** learn to derive an explicit, inspectable **execution plan** from a shader spec,
 analogous to a SQL logical + physical execution plan.

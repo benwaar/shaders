@@ -1,4 +1,4 @@
-# Phase 0 — GPU & Shader Basics (for Non-Graphics Programmers)
+# Phase 1 — GPU & Shader Basics (for Non-Graphics Programmers)
 
 **Goal:** understand just enough GPU and shader basics to be comfortable with the rest of this study.
 

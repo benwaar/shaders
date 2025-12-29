@@ -1,4 +1,4 @@
-## Phase 2 — Specs for Simple Effects
+## Phase 3 — Specs for Simple Effects
 
 **Goal:** build a small, well-understood set of shader effects, progressing from fully deterministic behavior to controlled time-based variation.
 
@@ -8,7 +8,32 @@ All shaders in this phase:
 - introduce **one new concept at a time**
 - are verified and locked before moving on
 
-### 2.1 Solid Tint
+Each effect in this phase also serves as a **building block** for one or more
+capstone shaders introduced earlier.
+
+---
+
+## Capstone Threads in Phase 3
+
+The three capstone shaders are **not implemented yet** in this phase.
+Instead, each simple effect contributes **one isolated concept** that will later
+be composed via planning (Phase 4) and implementation (later phases).
+
+| Primitive Effect | Feeds Capstone |
+|------------------|---------------|
+| Solid Tint | Capstone A — State-Driven Color & Mood |
+| Brightness / Contrast | Capstone A — State-Driven Color & Mood |
+| Vignette | Capstone B — Spatial Focus & Composition |
+| Scanlines | Capstone C — Bounded Temporal Tension |
+| Grain | Capstone C — Bounded Temporal Tension |
+| Flicker | Capstone C — Bounded Temporal Tension |
+
+The rule in this phase is **no synthesis**:
+each primitive is specified, implemented, and locked **on its own**.
+
+---
+
+### 3.1 Solid Tint
 
 **Purpose:** establish the simplest possible color modification.
 
@@ -22,9 +47,13 @@ Introduces:
 - strength blending
 - neutral defaults
 
+**Capstone relevance**
+- Forms the base color transform for **Capstone A**
+- Establishes monotonic control and neutral defaults for state-driven effects
+
 ---
 
-### 2.2 Brightness / Contrast
+### 3.2 Brightness / Contrast
 
 **Purpose:** add deterministic color transformation without spatial or temporal logic.
 
@@ -37,9 +66,13 @@ Introduces:
 - linear color remapping
 - parameterized intensity control
 
+**Capstone relevance**
+- Extends **Capstone A** with expressive but fully deterministic intensity control
+- Reinforces equivalence and monotonicity guarantees
+
 ---
 
-### 2.3 Vignette
+### 3.3 Vignette
 
 **Purpose:** introduce spatial falloff while keeping behavior static and predictable.
 
@@ -52,9 +85,13 @@ Introduces:
 - UV-based spatial reasoning
 - distance-based attenuation
 
+**Capstone relevance**
+- Core spatial mechanism for **Capstone B**
+- Establishes explicit coordinate assumptions and spatial invariants
+
 ---
 
-### 2.4 Scanlines
+### 3.4 Scanlines
 
 **Purpose:** introduce periodic patterns in screen space.
 
@@ -67,9 +104,13 @@ Introduces:
 - periodic functions
 - screen-space frequency control
 
+**Capstone relevance**
+- Provides a structured, non-random pattern for **Capstone C**
+- Useful for visual tension without temporal instability
+
 ---
 
-### 2.5 Grain
+### 3.5 Grain
 
 **Purpose:** introduce noise while preserving determinism.
 
@@ -82,9 +123,13 @@ Introduces:
 - noise functions
 - controlled randomness
 
+**Capstone relevance**
+- Adds controlled texture variation to **Capstone C**
+- Reinforces the rule that randomness must be explicit and bounded
+
 ---
 
-### 2.6 Flicker
+### 3.6 Flicker
 
 **Purpose:** introduce time as an input in a controlled, bounded way.
 
@@ -97,18 +142,29 @@ Introduces:
 - temporal inputs
 - time-based modulation
 
+**Capstone relevance**
+- Final temporal component for **Capstone C**
+- Establishes strict rules for opt-in nondeterminism
+
 ---
 
-**Exit criteria for Phase 2:**
-- Each effect has a locked spec
+## Exit Criteria for Phase 3
+
+- Each primitive effect has:
+  - a spec
+  - a verified implementation
+  - a `LOCKED` status
 - Behavior is predictable from the spec alone
 - No shader relies on undocumented constants or side effects
+- You can clearly state which capstone(s) each primitive feeds, and why
+
+No capstone shader is implemented in this phase.
 
 ---
 
-## Resources — Companion Videos (Phase 2)
+## Resources — Companion Videos (Phase 3)
 
-These videos support the **technical building blocks** introduced in Phase 2.
+These videos support the **technical building blocks** introduced in Phase 3.
 They focus on simple, explainable shader behaviors rather than complex visual effects.
 
 They are best watched **alongside writing specs**, not as step-by-step tutorials.

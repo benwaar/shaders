@@ -28,6 +28,32 @@ Reference → Visual Spec → Shader Spec → Plan (IR) → Implementation → I
 
 ---
 
+## Capstone Shaders (Built Incrementally)
+
+This study produces **three capstone shaders**.
+
+They are introduced early as **intent-only artifacts** and are
+implemented progressively as new concepts are learned.
+
+Each capstone is refined across multiple phases and is only
+considered complete once it is fully spec’d, planned, implemented,
+integrated, and locked.
+
+### Capstone A — State-Driven Color & Mood Shader
+A deterministic shader that communicates emotional or system state
+purely through controlled color and intensity changes.
+
+### Capstone B — Spatial Focus & Composition Shader
+A shader that guides attention using spatial falloff and composition,
+with explicit coordinate assumptions and performance guarantees.
+
+### Capstone C — Bounded Temporal Tension Shader
+A shader that uses time deliberately and safely, with strict bounds
+and defined equivalence.
+
+
+---
+
 # Phase 0 — Foundations, Mental Models & Early Gotchas
 
 This phase establishes the **mental model and discipline** used throughout the study.
@@ -285,6 +311,21 @@ You are done when you can:
 **If it isn’t verifiable, it isn’t a spec.**
 
 ---
+
+## Capstone Summary — What This Study Produces
+
+At completion, this repository contains three locked shaders that
+demonstrate spec-driven engineering across state, space, and time.
+
+- **Capstone A** proves deterministic state signaling
+- **Capstone B** proves spatial reasoning and compositional control
+- **Capstone C** proves bounded, explainable temporal behavior
+
+Together, they demonstrate the full workflow:
+spec → plan → implementation → integration → verification
+
+---
+
 
 ## Future Study — Porting & Multi-Backend Support (Deferred)
 

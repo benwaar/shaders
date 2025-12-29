@@ -1,4 +1,4 @@
-# Phase 1 — Spec Foundations
+# Phase 2 — Spec Foundations
 
 **Goal:** learn to write enforceable shader specifications before touching GLSL.
 
@@ -117,16 +117,31 @@ Failing the gate means the spec must be revised before any code is written.
 
 ---
 
-## Output of Phase 1
+## Output of Phase 2
 
-You are done with Phase 1 when you can:
+You are done with Phase 2 when you can:
 
 - write a complete shader spec without referencing code
 - predict shader behavior from the spec alone
 - identify ambiguities before implementation
 - reject unclear specs instead of “fixing” them in code
 
-Only after this phase should you proceed to Phase 2.
+Only after this phase should you proceed to Phase 3.
+
+---
+
+## Capstone Markers (Phase 2)
+
+This study has **three capstone shaders** that are built incrementally across phases.
+In Phase 2, the goal is **spec-only**: create an initial `DRAFT` spec for each capstone
+that passes the Spec Gate (even if the behavior is still minimal).
+
+- [ ] **Capstone A — State-Driven Color & Mood**: initial `DRAFT` spec created and gated  
+- [ ] **Capstone B — Spatial Focus & Composition**: initial `DRAFT` spec created and gated  
+- [ ] **Capstone C — Bounded Temporal Tension**: initial `DRAFT` spec created and gated  
+
+These specs should describe **behavioral intent**, declared inputs, constraints, non-goals,
+and acceptance checks — without referencing implementation or math.
 
 ---
 
@@ -136,9 +151,9 @@ Only after this phase should you proceed to Phase 2.
 
 ---
 
-## Resources — Companion Videos (Phase 1)
+## Resources — Companion Videos (Phase 2)
 
-These videos support the **spec-first, behavior-driven mindset** required in Phase 1.
+These videos support the **spec-first, behavior-driven mindset** required in Phase 2.
 They are not shader tutorials; they focus on intent, verification, and defining “done.”
 
 - **How to Write Acceptance Tests**  

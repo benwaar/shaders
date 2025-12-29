@@ -153,7 +153,6 @@ Continue from the current phase here:
 👉 **[PHASE2.md](PHASE2.md)** — spec foundations & spec gate  
 👉 **[PHASE3.md](PHASE3.md)** — simple effect specs (skill ladder)  
 👉 **[PHASE4.md](PHASE4.md)** — spec-to-plan (IR) & EXPLAIN reasoning  
-👉 **[PHASE5.md](PHASE5.md)** — cross-shader conventions & shared semantics
 
 Progression is gated by **spec clarity**, not visual flash.  
 Shaders are not implemented unless their specs meet minimum verification criteria.
