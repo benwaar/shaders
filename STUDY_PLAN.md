@@ -41,15 +41,15 @@ Each capstone is refined across multiple phases and is only
 considered complete once it is fully spec’d, planned, implemented,
 integrated, and locked.
 
-### Capstone A — State-Driven Color & Mood Shader
+### Capstone α — State-Driven Color & Mood Shader
 A deterministic shader that communicates emotional or system state
 purely through controlled color and intensity changes.
 
-### Capstone B — Spatial Focus & Composition Shader
+### Capstone β — Spatial Focus & Composition Shader
 A shader that guides attention using spatial falloff and composition,
 with explicit coordinate assumptions and performance guarantees.
 
-### Capstone C — Bounded Temporal Tension Shader
+### Capstone γ — Bounded Temporal Tension Shader
 A shader that uses time deliberately and safely, with strict bounds
 and defined equivalence.
 
@@ -150,6 +150,14 @@ A heads-up display effect applied to UI/text surfaces: subtle flicker, scanlines
 
 Invariant: when all effect controls are zero, text is perfectly readable.
 
+---
+
+### Applied Shader Project B — Dream Depth & Presence (Atmospheric Separation)
+
+A calm, deterministic “dream depth” shader that gently separates subject from background using soft spatial falloff and subtle color drift (no noise, no glitch, no spectacle). The effect should feel like increased presence and softness rather than blur: background regions become slightly more diffuse/less contrasty while the subject retains clarity. Defaults must be neutral (no visible change), and any optional time component is strictly bounded and slow enough to read as “breathing” rather than animation.
+
+Invariant: at defaults, output matches input; increasing `uPresence` increases separation monotonically without introducing artifacts.
+
 
 ---
 
@@ -172,7 +180,7 @@ from each shader spec *before* implementation, so you can reason about correctne
 
 ---
 
-### Applied Shader Project B — Generator Overload (Electric Tension Layer)
+### Applied Shader Project C — Generator Overload (Electric Tension Layer)
 
 A “reactor/generator overload” effect: rising emissive intensity, crawling electric arcs, and bounded temporal variation to create tension without chaos. This is a strong candidate for the **Bounded Temporal Tension** capstone thread, but it is only built after the Spec-to-Plan (IR) phase so the arc logic and cost (ALU vs samples) is explainable. Early versions use Phase 3 primitives (brightness/contrast + grain + flicker); later versions add a dedicated “electric arc” primitive and are verified with explicit bounds and equivalence rules.
 
@@ -216,7 +224,7 @@ Deliverable: engineering-grade visual specs.
 
 ---
 
-### Applied Shader Project C — Rocket Exhaust Flame (Procedural Emission)
+### Applied Shader Project D — Rocket Exhaust Flame (Procedural Emission)
 
 A procedural rocket exhaust effect built as a controlled emission system: core brightness, falloff, and time-warped noise shaping a flame cone. This comes after planning because it is noise-heavy and can easily become unstable or expensive without clear constraints. The study treats it as layered behavior (mask → gradient → noise modulation → bounded animation) with explicit performance expectations and strict neutral defaults (no thrust = no visible effect).
 
@@ -256,7 +264,7 @@ Rules:
 
 ---
 
-### Applied Shader Project D — Shockwave / Impact Propagation
+### Applied Shader Project E — Shockwave / Impact Propagation
 
 A controlled, event-driven shader representing a single impulse propagating through space and decaying over time.
 
@@ -271,7 +279,7 @@ This shader contains no fire, debris, or chaos. It exists to teach orchestration
 
 ---
 
-### Applied Shader Project E — Forest Explosion (Multi-System Composition)
+### Applied Shader Project F — Forest Explosion (Multi-System Composition)
 
 A forest explosion is treated as a **composition of systems**, not a single shader: a flash/pulse layer, an expanding shockwave ring/distortion, smoke/noise billows, and optional debris/sparks (often better as particles). This project is intentionally deferred until after planning and conventions, because it requires clear authority boundaries (what is shader-owned vs particle-owned), temporal sequencing, and equivalence tolerance rules. It becomes a “systems integration” exercise: spec → plan → layered implementation → verification across multiple components.
 
@@ -367,9 +375,9 @@ You are done when you can:
 At completion, this repository contains three locked shaders that
 demonstrate spec-driven engineering across state, space, and time.
 
-- **Capstone A** proves deterministic state signaling
-- **Capstone B** proves spatial reasoning and compositional control
-- **Capstone C** proves bounded, explainable temporal behavior
+- **Capstone α** proves deterministic state signaling
+- **Capstone β** proves spatial reasoning and compositional control
+- **Capstone γ** proves bounded, explainable temporal behavior
 
 Together, they demonstrate the full workflow:
 spec → plan → implementation → integration → verification

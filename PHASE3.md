@@ -21,12 +21,12 @@ be composed via planning (Phase 4) and implementation (later phases).
 
 | Primitive Effect | Feeds Capstone |
 |------------------|---------------|
-| Solid Tint | Capstone A — State-Driven Color & Mood |
-| Brightness / Contrast | Capstone A — State-Driven Color & Mood |
-| Vignette | Capstone B — Spatial Focus & Composition |
-| Scanlines | Capstone C — Bounded Temporal Tension |
-| Grain | Capstone C — Bounded Temporal Tension |
-| Flicker | Capstone C — Bounded Temporal Tension |
+| Solid Tint | Capstone α — State-Driven Color & Mood |
+| Brightness / Contrast | Capstone α — State-Driven Color & Mood |
+| Vignette | Capstone β — Spatial Focus & Composition |
+| Scanlines | Capstone γ — Bounded Temporal Tension |
+| Grain | Capstone γ — Bounded Temporal Tension |
+| Flicker | Capstone γ — Bounded Temporal Tension |
 
 The rule in this phase is **no synthesis**:
 each primitive is specified, implemented, and locked **on its own**.
@@ -48,7 +48,7 @@ Introduces:
 - neutral defaults
 
 **Capstone relevance**
-- Forms the base color transform for **Capstone A**
+- Forms the base color transform for **Capstone α**
 - Establishes monotonic control and neutral defaults for state-driven effects
 
 ---
@@ -67,7 +67,7 @@ Introduces:
 - parameterized intensity control
 
 **Capstone relevance**
-- Extends **Capstone A** with expressive but fully deterministic intensity control
+- Extends **Capstone α** with expressive but fully deterministic intensity control
 - Reinforces equivalence and monotonicity guarantees
 
 ---
@@ -86,7 +86,7 @@ Introduces:
 - distance-based attenuation
 
 **Capstone relevance**
-- Core spatial mechanism for **Capstone B**
+- Core spatial mechanism for **Capstone β**
 - Establishes explicit coordinate assumptions and spatial invariants
 
 ---
@@ -105,7 +105,7 @@ Introduces:
 - screen-space frequency control
 
 **Capstone relevance**
-- Provides a structured, non-random pattern for **Capstone C**
+- Provides a structured, non-random pattern for **Capstone γ**
 - Useful for visual tension without temporal instability
 
 ---
@@ -124,7 +124,7 @@ Introduces:
 - controlled randomness
 
 **Capstone relevance**
-- Adds controlled texture variation to **Capstone C**
+- Adds controlled texture variation to **Capstone γ**
 - Reinforces the rule that randomness must be explicit and bounded
 
 ---
@@ -143,7 +143,7 @@ Introduces:
 - time-based modulation
 
 **Capstone relevance**
-- Final temporal component for **Capstone C**
+- Final temporal component for **Capstone γ**
 - Establishes strict rules for opt-in nondeterminism
 
 ---

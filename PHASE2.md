@@ -136,9 +136,9 @@ This study has **three capstone shaders** that are built incrementally across ph
 In Phase 2, the goal is **spec-only**: create an initial `DRAFT` spec for each capstone
 that passes the Spec Gate (even if the behavior is still minimal).
 
-- [ ] **Capstone A — State-Driven Color & Mood**: initial `DRAFT` spec created and gated  
-- [ ] **Capstone B — Spatial Focus & Composition**: initial `DRAFT` spec created and gated  
-- [ ] **Capstone C — Bounded Temporal Tension**: initial `DRAFT` spec created and gated  
+- [ ] **Capstone α — State-Driven Color & Mood**: initial `DRAFT` spec created and gated  
+- [ ] **Capstone β — Spatial Focus & Composition**: initial `DRAFT` spec created and gated  
+- [ ] **Capstone γ — Bounded Temporal Tension**: initial `DRAFT` spec created and gated  
 
 These specs should describe **behavioral intent**, declared inputs, constraints, non-goals,
 and acceptance checks — without referencing implementation or math.
