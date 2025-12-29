@@ -26,6 +26,8 @@ No spec is changed without intent changing.
 
 Reference → Visual Spec → Shader Spec → Plan (IR) → Implementation → Integration → Verification
 
+Browser-first gate: All primitive shaders and Applied Shader Projects A–E must run and be verified in the simple browser player before any Flutter integration work begins.
+
 ---
 
 ## Capstone Shaders (Built Incrementally)
@@ -142,6 +144,15 @@ Each effect is specified, implemented, verified, and locked before moving on.
 
 ---
 
+### Applied Shader Project A — HUD Interference for Text (Flicker + Scanlines + Grain)
+
+A heads-up display effect applied to UI/text surfaces: subtle flicker, scanlines, noise, brightness pulsing, and occasional glitch-like instability. The shader **does not generate text** or “swap languages”; text swapping is owned by the UI layer (two strings or two pre-rendered glyph textures), while the shader provides the visual interference layer. This project exercises neutral defaults, monotonic controls, and bounded time-based flicker using Phase 3 primitives.
+
+Invariant: when all effect controls are zero, text is perfectly readable.
+
+
+---
+
 # Phase 4 — Spec-to-Plan (IR) & EXPLAIN Reports **(NEW)**
 **Goal:** build the “query planner” layer: derive an explicit, inspectable **logical + physical plan**
 from each shader spec *before* implementation, so you can reason about correctness + performance.
@@ -152,12 +163,20 @@ from each shader spec *before* implementation, so you can reason about correctne
   - **Physical Plan:** texture fetch count, ALU hotspots, precision policy, coordinate assumptions
   - **Allowed Rewrites:** semantics-preserving optimizations (constant folding, sample reuse, clamp merge)
   - **EXPLAIN Trace:** mapping from spec clauses → plan nodes (what came from where)
-- For each Phase 2 shader, produce an **EXPLAIN.md** (or `PLAN` section) alongside the spec.
+- For each Phase 3 shader and for each shader with a spec, produce an **EXPLAIN.md** (or `PLAN` section) alongside the spec.
 
 **Exit criteria**
 - You can predict texture samples + likely hotspots from the plan alone.
 - You can propose ≥3 optimizations as **rewrites** without changing spec semantics.
 - Two implementations can differ in code but share the same plan + verified behavior.
+
+---
+
+### Applied Shader Project B — Generator Overload (Electric Tension Layer)
+
+A “reactor/generator overload” effect: rising emissive intensity, crawling electric arcs, and bounded temporal variation to create tension without chaos. This is a strong candidate for the **Bounded Temporal Tension** capstone thread, but it is only built after the Spec-to-Plan (IR) phase so the arc logic and cost (ALU vs samples) is explainable. Early versions use Phase 3 primitives (brightness/contrast + grain + flicker); later versions add a dedicated “electric arc” primitive and are verified with explicit bounds and equivalence rules.
+
+Invariant: intensity and motion are bounded and never diverge.
 
 ---
 
@@ -197,6 +216,14 @@ Deliverable: engineering-grade visual specs.
 
 ---
 
+### Applied Shader Project C — Rocket Exhaust Flame (Procedural Emission)
+
+A procedural rocket exhaust effect built as a controlled emission system: core brightness, falloff, and time-warped noise shaping a flame cone. This comes after planning because it is noise-heavy and can easily become unstable or expensive without clear constraints. The study treats it as layered behavior (mask → gradient → noise modulation → bounded animation) with explicit performance expectations and strict neutral defaults (no thrust = no visible effect).
+
+Invariant: no thrust input produces no visible emission.
+
+---
+
 # Phase 7 — Visual Spec → Shader Spec
 
 **Goal:** translate visual specs into formal shader contracts.
@@ -226,6 +253,29 @@ Rules:
 
 **Exit criteria**
 - Implementation matches acceptance criteria without “hand-wavy” exceptions
+
+---
+
+### Applied Shader Project D — Shockwave / Impact Propagation
+
+A controlled, event-driven shader representing a single impulse propagating through space and decaying over time.
+
+This project introduces:
+- event-based time (not continuous oscillation)
+- explicit start / peak / decay phases
+- bounded temporal envelopes
+- spatial propagation tied to time
+- equivalence rules for “close enough” behavior
+
+This shader contains no fire, debris, or chaos. It exists to teach orchestration discipline before multi-system composition.
+
+---
+
+### Applied Shader Project E — Forest Explosion (Multi-System Composition)
+
+A forest explosion is treated as a **composition of systems**, not a single shader: a flash/pulse layer, an expanding shockwave ring/distortion, smoke/noise billows, and optional debris/sparks (often better as particles). This project is intentionally deferred until after planning and conventions, because it requires clear authority boundaries (what is shader-owned vs particle-owned), temporal sequencing, and equivalence tolerance rules. It becomes a “systems integration” exercise: spec → plan → layered implementation → verification across multiple components.
+
+Invariant: each sub-system can be disabled independently without breaking others.
 
 ---
 
