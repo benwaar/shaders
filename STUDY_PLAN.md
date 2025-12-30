@@ -402,3 +402,16 @@ It becomes relevant only after:
 
 When it becomes relevant, treat porting as a new study with its own constraints,
 targets, and verification strategy.
+
+---
+
+## Future Study — MCP-Assisted Spec → Shader Workflows (Optional)
+
+Once the manual workflow is stable (spec gates, plans, verification, and locking), MCP tooling can be explored as an **assistive layer**, not an authoring authority. MCP is used only to strengthen the existing loop — reference lookup, documentation grounding, compilation, and verification — while preserving the core rule that **specs define behavior and code merely satisfies them**. Any MCP involvement must be auditable, reproducible, and explicitly constrained so it cannot bypass spec gates, introduce hidden behavior, or weaken determinism. This phase evaluates MCP not for convenience, but for whether it improves correctness, iteration speed, and teachability without eroding engineering discipline.
+
+**Top 5 MCP uses to explore**
+- **Reference mining** — retrieve comparable shader patterns and translate them into local specs and IR, never code-copying.
+- **Documentation grounding** — query GLSL/shader references to confirm semantics and avoid hallucinated behavior.
+- **Compile/run verification** — compile and execute shaders in a sandbox to catch real errors and validate outputs.
+- **Agent-assisted iteration** — allow MCP to suggest edits only within an existing spec + plan, never to change intent.
+- **Audit & explainability** — require MCP-assisted changes to update EXPLAIN traces and remain diff-inspectable.
