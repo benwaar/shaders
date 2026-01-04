@@ -18,7 +18,7 @@ const SHADER_DIR = "../shaders/";                 // fragment shaders + manifest
 const VERT_DIR = "../verts/";                     // vertex shaders
 const DEFAULT_VERT_FILE = "clipspace_to_uv.vert";
 const MANIFEST_URL = SHADER_DIR + "manifest.json";
-const DEFAULT_IMAGE_URL = "/assets/test.png";           // moved to assets/
+const DEFAULT_IMAGE_URL = "/assets/test.png";     // moved to assets/
 
 // Fullscreen quad (2 triangles) in clip space
 const quad = new Float32Array([
@@ -50,8 +50,9 @@ function compileShader(type, src) {
   const s = gl.createShader(type);
   gl.shaderSource(s, src);
   gl.compileShader(s);
-  if (!gl.getShaderParameter(s, gl.COMPLETE_STATUS) &&
-      !gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+
+  // WebGL2 uses COMPILE_STATUS for shader compilation success.
+  if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
     const log = gl.getShaderInfoLog(s);
     gl.deleteShader(s);
     throw new Error(log || "Shader compile failed");
@@ -130,6 +131,33 @@ async function fetchText(url) {
   return await res.text();
 }
 
+// Preprocess #include directives (WebGL does not support includes natively).
+// Supports lines of the form: #include "common.glslinc"
+async function resolveIncludes(src, baseDir, depth = 0) {
+  if (depth > 8) throw new Error("Include depth exceeded");
+  const includeRe = /^[ \t]*#include\s+"([^"]+)"[ \t]*$/gm;
+
+  let out = src;
+
+  while (true) {
+    includeRe.lastIndex = 0;
+    const match = includeRe.exec(out);
+    if (!match) break;
+
+    const incName = match[1];
+    const incPath = baseDir + incName;
+    const incText = await fetchText(incPath);
+
+    // Resolve nested includes inside the include file.
+    const resolved = await resolveIncludes(incText, baseDir, depth + 1);
+
+    // Replace exactly this include line.
+    out = out.slice(0, match.index) + resolved + out.slice(match.index + match[0].length);
+  }
+
+  return out;
+}
+
 async function fetchManifest() {
   const txt = await fetchText(MANIFEST_URL);
   return JSON.parse(txt);
@@ -194,7 +222,8 @@ async function loadShaderAndBuild(shaderFile) {
     throw new Error("Vertex shader source not loaded");
   }
 
-  const fragSrc = await fetchText(SHADER_DIR + shaderFile);
+  let fragSrc = await fetchText(SHADER_DIR + shaderFile);
+  fragSrc = await resolveIncludes(fragSrc, SHADER_DIR);
 
   if (!fragSrc.trim().startsWith("#version 300 es")) {
     throw new Error("Fragment shader must start with '#version 300 es'");

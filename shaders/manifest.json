@@ -1,7 +1,7 @@
 {
   "fragments": [
     "passthrough.frag",
-    "passthrough2.frag",
-    "solid_tint.frag"
+    "solid_tint.frag",
+    "include_smoke_test.frag"
   ]
 }

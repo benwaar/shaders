@@ -7,7 +7,17 @@ This repository is a **shader study project**. When a new chat begins, **read an
 - `chatgpt_prefs.webgl2.json`
 - `README.md`
 - `STUDY_PLAN.md`
+- `PHASE0.md`
+- `PHASE1.md`
 - `PHASE2.md`
+- (and so on for any `PHASE*.md` that exists)
+
+### Rule
+If multiple `PHASE*.md` files exist, read them **in numeric order** and then **continue from the latest phase** (highest-numbered phase present), unless a document explicitly marks a different current phase.
+
+### Note
+`chatgpt_prefs.webgl2.json` provides collaboration defaults for ChatGPT and tooling.
+It is not an authoritative specification of shader behavior or pipeline contracts. (Useful for early stages)
 
 ## 2) Apply the prefs (summary)
 - Target **WebGL2** with **GLSL ES 3.00** (auto-upgrade legacy GLSL if needed).

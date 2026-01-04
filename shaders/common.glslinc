@@ -1,3 +1,39 @@
-// common helpers for 300 es
-float hash1(float x){ return fract(sin(x)*43758.5453123); }
-float hash2(vec2 p){ return fract(sin(dot(p, vec2(12.9898,78.233))) * 43758.5453); }
+// common.glslinc
+// Shared mechanical utilities for Stage 1 shaders.
+// Rule: No effect behavior lives here (no vignette/scanlines/grain/flicker/etc).
+
+#ifndef COMMON_GLSLINC
+#define COMMON_GLSLINC
+
+// --- Constants ---
+const float PI  = 3.14159265358979323846;
+const float TAU = 6.28318530717958647692;
+
+// --- Clamp helpers ---
+float saturate(float x) { return clamp(x, 0.0, 1.0); }
+vec2  saturate(vec2  x) { return clamp(x, 0.0, 1.0); }
+vec3  saturate(vec3  x) { return clamp(x, 0.0, 1.0); }
+vec4  saturate(vec4  x) { return clamp(x, 0.0, 1.0); }
+
+// --- Interpolation helpers ---
+float inv_lerp(float a, float b, float v) {
+  // Returns t where v = mix(a, b, t). If a==b, returns 0.
+  return (a == b) ? 0.0 : (v - a) / (b - a);
+}
+
+float remap(float inA, float inB, float outA, float outB, float v) {
+  float t = inv_lerp(inA, inB, v);
+  return mix(outA, outB, t);
+}
+
+float linstep(float edge0, float edge1, float x) {
+  return saturate(inv_lerp(edge0, edge1, x));
+}
+
+// --- Color helpers ---
+float luminance(vec3 rgb) {
+  // Rec.709 luma coefficients (linear-space assumption; spec decides spaces)
+  return dot(rgb, vec3(0.2126, 0.7152, 0.0722));
+}
+
+#endif // COMMON_GLSLINC

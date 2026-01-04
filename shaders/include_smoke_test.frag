@@ -1,0 +1,25 @@
+#version 300 es
+precision mediump float;
+
+#include "common.glslinc"
+
+// this is for testing the player works
+
+uniform sampler2D uTexture;
+uniform float uStrength; // reuse existing slider in your player UI
+
+in vec2 vTexCoord;
+out vec4 fragColor;
+
+void main() {
+  vec4 src = texture(uTexture, vTexCoord);
+
+  // Proof-of-include: saturate() is defined only in common.glslinc
+  float s = saturate(uStrength);
+
+  // Simple, obvious output: mix to magenta as strength increases
+  vec3 magenta = vec3(1.0, 0.0, 1.0);
+  vec3 rgb = mix(src.rgb, magenta, s);
+
+  fragColor = vec4(rgb, src.a);
+}
