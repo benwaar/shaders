@@ -18,7 +18,7 @@ void main() {
   float s = saturate(uStrength);
 
   // Simple, obvious output: mix to magenta as strength increases
-  vec3 magenta = vec3(1.0, 0.0, 1.0);
+  vec3 magenta = vec3(1.0f, 0.0f, 1.0f);
   vec3 rgb = mix(src.rgb, magenta, s);
 
   fragColor = vec4(rgb, src.a);

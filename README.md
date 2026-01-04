@@ -117,3 +117,9 @@ For new sessions or collaborators:
 5. Use `shaders/manifest.json` for discovery
 
 If it isn’t verifiable, it isn’t a spec.
+---
+
+## Useful Tools
+
+**VSCode Extensions for Shader Development:**
+- **WebGL GLSL Editor** — Real-time linting and syntax highlighting for `.frag` and `.vert` files. Validates shader syntax as you write.

@@ -13,6 +13,6 @@ out vec4 fragColor;
 void main() {
     vec4 src = texture(uTexture, vTexCoord);
     vec4 tgt = vec4(src.rgb * uTint, src.a);
-    float s = clamp(uStrength, 0.0, 1.0);
+    float s = clamp(uStrength, 0.0f, 1.0f);
     fragColor = mix(src, tgt, s);
 }
