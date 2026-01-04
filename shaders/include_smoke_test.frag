@@ -3,7 +3,7 @@ precision mediump float;
 
 #include "common.glslinc"
 
-// this is for testing the player works
+// this is for testing the player can handle includes when we use them later
 
 uniform sampler2D uTexture;
 uniform float uStrength; // reuse existing slider in your player UI
