@@ -121,31 +121,11 @@ Implementation may change; behavior may not.
 
 ---
 
-## 🧩 Study Landscape
-
-```text
-Visual Reference Analysis
-├── Observable Visual Behavior
-│   ├── Spatial relationships (composition as layout constraints)
-│   ├── Color relationships (ranges, mappings, invariants)
-│   ├── Light behavior (gradients, falloff, highlights)
-│   └── Surface behavior (grain, blur, noise, distortion)
-├── Spec-Driven Shader Design
-│   ├── Fragment Shaders (GLSL ES 3.00)
-│   ├── Procedural effects (light, blur, grain, tint)
-│   └── Color grading & post-FX for 2D UI elements
-└── Visual Integration in Flutter
-    ├── Applying shaders to cards and surfaces
-    ├── Interaction-driven parameter changes (hover, selection)
-    └── Cross-scene consistency via shared specs
-```
-
----
-
 ## 📘 Study Plan
 
 👉 **[FOUNDATIONS.md — Shared Language & Mental Models](docs/FOUNDATIONS.md)**  
-👉 **[STUDY_PLAN.md](STUDY_PLAN.md)** — overall structure and rules  
+👉 **[STUDY_PLAN.md](STUDY_PLAN.md)** — overall structure of this study
+👉 **[The Shader Study Roadmap](docs/notes/roadmap_shader_targets.md)** - this study in the larger plan  
 
 Continue from the current phase here:  
 👉 **[PHASE0.md](PHASE0.md)** — spec-driven engineering foundations & early gotchas  
@@ -166,18 +146,6 @@ Reference documents explaining technologies, tradeoffs, and architectural choice
 See:
 - `docs/notes/shader_languages.md`
 - `docs/notes/flutter_rendering.md`
-- `docs/notes/roadmap_shader_targets.md`
-- `docs/notes/architecture_reuse.md`
-
----
-
-## 🔬 Future Research
-
-| Topic | Status | Summary |
-|-------|--------|----------|
-| **[Procedural Lighting in 2D](notes/future/procedural-lighting.md)** | 🧪 | Creating depth and atmosphere in flat scenes |
-| **[Emotion Through Color & Texture](notes/future/color-emotion-shaders.md)** | 🧪 | Using shader-driven color changes to reflect game states |
-| **[Shader Optimization for Mobile](notes/future/flutter-shader-performance.md)** | 🧪 | Ensuring smooth rendering across devices |
 
 ---
 
@@ -204,28 +172,12 @@ Only `LOCKED` specs may be reused or refactored.
 
 ---
 
-## 🌐 Resources & Inspiration
-
-Here are key references used to guide shader development and visual research:
-
-| # | Resource | Description |
-|---|----------|-------------|
-| 1 | [**Writing & using fragment shaders (Flutter Docs)**](https://docs.flutter.dev/ui/design/graphics/fragment-shaders?utm_source=chatgpt.com) | Official Flutter guide for loading and using `.frag` shaders. Essential for setup and understanding. |
-| 2 | [**Shady Flutter: Using GLSL Shaders in Flutter**](https://blog.codemagic.io/shady-flutter/?utm_source=chatgpt.com) | Hands-on intro with GLSL shader examples in Flutter — practical for 2D visual effects. |
-| 3 | [**Practical Fragment Shaders in Flutter – Droids on Roids**](https://www.thedroidsonroids.com/blog/fragment-shaders-in-flutter-app-development?utm_source=chatgpt.com) | Explains fragment shaders with clear examples, ideal for learning Flutter shader workflow. |
-| 4 | [**Analyzing Optic & Filmic Effects in WebGL**](https://medium.com/%40josecastrovaron/analyzing-optic-and-filmic-effects-in-webgl-47abe74df74e?utm_source=chatgpt.com) | Visual deep-dive into film grain, LUTs, and color grading — useful for connecting film language to shader logic. |
-| 5 | [**Film Grain Shader Example (GLSL)**](https://gameidea.org/2023/12/01/film-grain-shader/?utm_source=chatgpt.com) | Simple yet powerful example shader for film grain — perfect as a starting effect. |
-| 6 | [**Specification by Example (Overview)**](https://en.wikipedia.org/wiki/Specification_by_example) | Conceptual foundation for examples-as-specs and acceptance criteria, closely aligned with this repo’s spec-first approach. |
-| 7 | [**Hello, Spec-Driven Development (Video)**](https://www.youtube.com/watch?v=it2PI_EwEYM) | High-level introduction to writing specs before code and treating them as contracts, not documentation. |
-
----
-
 ## 🚦 Start Here for New Sessions
 
 If you are opening this project in a **new ChatGPT session** or joining as a collaborator:
 
 1. Read **`START_HERE_FOR_CHATGPT.md`** for project preferences and constraints  
-2. Follow **`STUDY_PLAN.md`** and **`PHASE2.md`** in order  
+2. Follow **`STUDY_PLAN.md`** and **`PHASE[0+].md`** in order  
 3. Keep shaders:
    - spec-driven
    - readable
