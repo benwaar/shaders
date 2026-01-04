@@ -1,4 +1,4 @@
-# 🎨 Visual Language & Spec-Driven Shader Engineering (Flutter Focus)
+# 🎨 Visual Language & Spec-Driven Shader Engineering
 
 This repository is a **foundational study in spec-driven engineering**, using
 **2D fragment shaders** as a deterministic substrate.
