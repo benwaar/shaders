@@ -4,7 +4,7 @@
 
 <img src="../../assets/cassowary.jpg" alt="Cassowary" width="200" />
 
-Cassowary (example output following study) [https://www.instagram.com/p/DSPpXZNiLeI/](https://www.instagram.com/p/DSPpXZNiLeI/)
+Cassowary (example output following study) [https://www.instagram.com/p/DUXrNBHCHJP/?img_index=2](https://www.instagram.com/p/DUXrNBHCHJP/?img_index=2)
 
 
 > **Prompt → Spec Design**
