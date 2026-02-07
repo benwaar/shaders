@@ -2,8 +2,8 @@
 
 
 This is a GLSL Shader study to add some pizzazz to the art from the art study
-> [Prompt engineering art study](../docs/ART_PROMPT_TO_SPECS_STUDY.md)   
-> [Shader languages](../docs/shader_languages.md)
+> [Prompt engineering art study](docs/art-prompts-to-specs/ART_PROMPT_TO_SPECS_STUDY.md)   
+> [Shader languages](docs/shader_languages.md)
 
 ---
 
