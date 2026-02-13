@@ -1,0 +1,21 @@
+{
+  "project": {
+    "name": "Shader Study",
+    "description": "GLSL shader learning project with minimal WebGL2 player"
+  },
+  "context": {
+    "include": [
+      "README.md",
+      "player/**/*",
+      "shaders/**/*.frag",
+      "shaders/**/*.glslinc",
+      "shaders/manifest.json"
+    ],
+    "exclude": [
+      "node_modules/**",
+      ".git/**",
+      "assets/**/*.png",
+      "assets/**/*.jpg"
+    ]
+  }
+}

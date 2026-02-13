@@ -1,7 +1,25 @@
 {
   "fragments": [
-    "passthrough.frag",
-    "solid_tint.frag",
-    "include_smoke_test.frag"
+    {
+      "file": "0_1_passthrough.frag",
+      "name": "0.1 Passthrough",
+      "description": "Simple texture display",
+      "phase": 0,
+      "controls": []
+    },
+    {
+      "file": "0_2_tint.frag",
+      "name": "0.2 Tint",
+      "description": "Color tinting with blend strength",
+      "phase": 0,
+      "controls": ["tint", "strength"]
+    },
+    {
+      "file": "0_3_include_test.frag",
+      "name": "0.3 Magenta Blend (Tests #include)",
+      "description": "Tests #include system with magenta blend",
+      "phase": 0,
+      "controls": ["strength"]
+    }
   ]
 }

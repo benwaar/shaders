@@ -6,19 +6,30 @@ const gl = canvas.getContext("webgl2", {
 
 // UI elements
 const shaderSelect = document.getElementById("shaderSelect");
-const vertSelect = document.getElementById("vertSelect");
+const imageSelect = document.getElementById("imageSelect");
 const fileInput = document.getElementById("fileInput");
 const tintEl = document.getElementById("tint");
 const strengthEl = document.getElementById("strength");
 const strengthVal = document.getElementById("strengthVal");
 const errorsEl = document.getElementById("errors");
 
+// UI control groups (for show/hide)
+const tintGroup = document.getElementById("tintGroup");
+const strengthGroup = document.getElementById("strengthGroup");
+
+// Shader metadata storage
+let shaderMetadata = new Map(); // Maps filename -> {name, description, phase, controls}
+let currentShaderFile = null;
+
+// Image dimensions (for canvas sizing)
+let imageWidth = 0;
+let imageHeight = 0;
+
 // ---- Paths (edit if your folders differ) ----
 const SHADER_DIR = "../shaders/";                 // fragment shaders + manifest
-const VERT_DIR = "../verts/";                     // vertex shaders
-const DEFAULT_VERT_FILE = "clipspace_to_uv.vert";
+const VERT_SHADER_PATH = "./shader.vert";         // single vertex shader (part of player)
 const MANIFEST_URL = SHADER_DIR + "manifest.json";
-const DEFAULT_IMAGE_URL = "/assets/test.png";     // moved to assets/
+const DEFAULT_IMAGE_URL = "/assets/cassowary.jpg"; // default image
 
 // Fullscreen quad (2 triangles) in clip space
 const quad = new Float32Array([
@@ -35,14 +46,24 @@ function setError(msg) {
   if (msg) console.error(msg);
 }
 
-function resizeCanvasToDisplaySize() {
-  const dpr = Math.max(1, window.devicePixelRatio || 1);
-  const w = Math.floor(canvas.clientWidth * dpr);
-  const h = Math.floor(canvas.clientHeight * dpr);
-  if (canvas.width !== w || canvas.height !== h) {
-    canvas.width = w;
-    canvas.height = h;
-    gl.viewport(0, 0, w, h);
+function resizeCanvasToImageSize() {
+  // If we have image dimensions, use them; otherwise fall back to client size
+  if (imageWidth > 0 && imageHeight > 0) {
+    if (canvas.width !== imageWidth || canvas.height !== imageHeight) {
+      canvas.width = imageWidth;
+      canvas.height = imageHeight;
+      gl.viewport(0, 0, imageWidth, imageHeight);
+    }
+  } else {
+    // Fallback to display size if no image loaded yet
+    const dpr = Math.max(1, window.devicePixelRatio || 1);
+    const w = Math.floor(canvas.clientWidth * dpr);
+    const h = Math.floor(canvas.clientHeight * dpr);
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width = w;
+      canvas.height = h;
+      gl.viewport(0, 0, w, h);
+    }
   }
 }
 
@@ -120,6 +141,12 @@ function createTextureFromImage(img) {
   );
 
   gl.bindTexture(gl.TEXTURE_2D, null);
+
+  // Store image dimensions and resize canvas to fit
+  imageWidth = img.width;
+  imageHeight = img.height;
+  resizeCanvasToImageSize();
+
   return tex;
 }
 
@@ -203,17 +230,32 @@ function cacheUniforms() {
   uTimeLoc = gl.getUniformLocation(program, "uTime"); // for future shaders
 }
 
-async function loadVertexShader(filename = DEFAULT_VERT_FILE) {
-  const src = await fetchText(VERT_DIR + filename);
+function updateControlsVisibility(shaderFile) {
+  const metadata = shaderMetadata.get(shaderFile);
+  if (!metadata) {
+    // If no metadata, show all controls (backward compatibility)
+    if (tintGroup) tintGroup.style.display = "";
+    if (strengthGroup) strengthGroup.style.display = "";
+    return;
+  }
+
+  const controls = metadata.controls || [];
+
+  // Update visibility based on controls array
+  if (tintGroup) {
+    tintGroup.style.display = controls.includes("tint") ? "" : "none";
+  }
+  if (strengthGroup) {
+    strengthGroup.style.display = controls.includes("strength") ? "" : "none";
+  }
+}
+
+async function loadVertexShader() {
+  const src = await fetchText(VERT_SHADER_PATH);
   if (!src.trim().startsWith("#version 300 es")) {
     throw new Error("Vertex shader must start with '#version 300 es'");
   }
   vertSource = src;
-}
-
-async function fetchVertexManifest() {
-  const txt = await fetchText(VERT_DIR + "manifest.json");
-  return JSON.parse(txt);
 }
 
 async function loadShaderAndBuild(shaderFile) {
@@ -232,10 +274,14 @@ async function loadShaderAndBuild(shaderFile) {
   program = createProgram(vertSource, fragSrc);
   cacheUniforms();
   setupQuad();
+
+  // Update UI controls based on shader requirements
+  currentShaderFile = shaderFile;
+  updateControlsVisibility(shaderFile);
 }
 
 function renderFrame(tSec) {
-  resizeCanvasToDisplaySize();
+  resizeCanvasToImageSize();
 
   gl.clearColor(0, 0, 0, 1);
   gl.clear(gl.COLOR_BUFFER_BIT);
@@ -290,37 +336,8 @@ async function main() {
   const img = await loadImage(DEFAULT_IMAGE_URL);
   tex = createTextureFromImage(img);
 
-  // Load vertex manifest and populate vertex dropdown
-  try {
-    const vmanifest = await fetchVertexManifest();
-    const verts = vmanifest.vertices || [];
-    if (vertSelect && verts.length) {
-      vertSelect.innerHTML = "";
-      for (const v of verts) {
-        const opt = document.createElement("option");
-        opt.value = v;
-        opt.textContent = v;
-        vertSelect.appendChild(opt);
-      }
-      // Load selected or default
-      const preferredVert = verts.includes(DEFAULT_VERT_FILE) ? DEFAULT_VERT_FILE : verts[0];
-      vertSelect.value = preferredVert;
-      await loadVertexShader(vertSelect.value);
-
-      vertSelect.addEventListener("change", async () => {
-        try {
-          await loadVertexShader(vertSelect.value);
-          await loadShaderAndBuild(shaderSelect.value);
-        } catch (e) { setError(e); }
-      });
-    } else {
-      // fallback to default single vertex
-      await loadVertexShader();
-    }
-  } catch (ve) {
-    // If vertex manifest not present, fall back to default
-    await loadVertexShader();
-  }
+  // Load vertex shader (single file, part of player infrastructure)
+  await loadVertexShader();
 
   // Load fragment manifest + populate dropdown
   const manifest = await fetchManifest();
@@ -329,15 +346,35 @@ async function main() {
     throw new Error("Manifest has no 'fragments'");
   }
 
+  // Parse manifest: support both old format (array of strings) and new format (array of objects)
   shaderSelect.innerHTML = "";
   for (const f of frags) {
+    let filename, displayName, metadata;
+
+    if (typeof f === "string") {
+      // Old format: just filename
+      filename = f;
+      displayName = f;
+      metadata = { file: f, name: f, controls: [] };
+    } else {
+      // New format: object with file, name, description, phase, controls
+      filename = f.file;
+      displayName = f.name || f.file;
+      metadata = f;
+    }
+
+    // Store metadata for this shader
+    shaderMetadata.set(filename, metadata);
+
+    // Create dropdown option
     const opt = document.createElement("option");
-    opt.value = f;
-    opt.textContent = f;
+    opt.value = filename;
+    opt.textContent = displayName;
     shaderSelect.appendChild(opt);
   }
 
-  // Load first shader by default
+  // Load latest (last) shader by default
+  shaderSelect.selectedIndex = shaderSelect.options.length - 1;
   await loadShaderAndBuild(shaderSelect.value);
 
   shaderSelect.addEventListener("change", async () => {
@@ -348,7 +385,19 @@ async function main() {
     }
   });
 
-  // Upload replacement image
+  // Select preset image
+  imageSelect.addEventListener("change", async () => {
+    try {
+      const url = imageSelect.value;
+      const img = await loadImage(url);
+      if (tex) gl.deleteTexture(tex);
+      tex = createTextureFromImage(img);
+    } catch (e) {
+      setError(e);
+    }
+  });
+
+  // Upload custom image
   fileInput.addEventListener("change", async () => {
     try {
       const file = fileInput.files?.[0];
@@ -363,7 +412,7 @@ async function main() {
     }
   });
 
-  window.addEventListener("resize", () => resizeCanvasToDisplaySize());
+  window.addEventListener("resize", () => resizeCanvasToImageSize());
 
   requestAnimationFrame((ms) => renderFrame(ms / 1000));
 }

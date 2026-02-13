@@ -8,11 +8,11 @@ precision mediump float;
 uniform sampler2D uTexture;
 uniform float uStrength; // reuse existing slider in your player UI
 
-in vec2 vTexCoord;
+in vec2 vUV;
 out vec4 fragColor;
 
 void main() {
-  vec4 src = texture(uTexture, vTexCoord);
+  vec4 src = texture(uTexture, vUV);
 
   // Proof-of-include: saturate() is defined only in common.glslinc
   float s = saturate(uStrength);

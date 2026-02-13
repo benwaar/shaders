@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./install-hooks.sh)",
+      "Bash(ls:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}

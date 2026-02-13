@@ -1,0 +1,131 @@
+#!/bin/bash
+# Git pre-commit hook for shader project
+#
+# Validates before commit:
+# 1. Shader manifest is valid JSON
+# 2. All shaders in manifest exist
+# 3. GLSL syntax (optional, if glslangValidator is installed)
+
+set -e
+
+# Get the git repository root
+REPO_ROOT=$(git rev-parse --show-toplevel)
+cd "$REPO_ROOT"
+
+echo "======================================================================"
+echo "Running pre-commit checks for shader project..."
+echo "======================================================================"
+
+# Track overall success
+ALL_PASSED=true
+
+# Function to run a check
+run_check() {
+    local description="$1"
+    shift
+    local cmd=("$@")
+
+    echo ""
+    echo "🔍 $description..."
+
+    if "${cmd[@]}" > /tmp/pre-commit-check.log 2>&1; then
+        echo "✅ $description passed"
+        return 0
+    else
+        echo "❌ $description failed"
+        echo ""
+        cat /tmp/pre-commit-check.log
+        ALL_PASSED=false
+        return 1
+    fi
+}
+
+# Check 1: Validate manifest.json
+validate_manifest() {
+    local manifest="shaders/manifest.json"
+
+    if [ ! -f "$manifest" ]; then
+        echo "Error: $manifest not found"
+        return 1
+    fi
+
+    # Check if valid JSON
+    if ! python3 -m json.tool "$manifest" > /dev/null 2>&1; then
+        echo "Error: $manifest is not valid JSON"
+        return 1
+    fi
+
+    # Check that all listed shaders exist
+    local missing_shaders=()
+    while IFS= read -r shader; do
+        if [ ! -f "shaders/$shader" ]; then
+            missing_shaders+=("$shader")
+        fi
+    done < <(python3 -c "import json; print('\n'.join(json.load(open('$manifest'))['fragments']))")
+
+    if [ ${#missing_shaders[@]} -gt 0 ]; then
+        echo "Error: The following shaders are listed in manifest but don't exist:"
+        printf '  - %s\n' "${missing_shaders[@]}"
+        return 1
+    fi
+
+    return 0
+}
+
+# Check 2: Validate GLSL syntax (optional)
+validate_glsl() {
+    # Check if glslangValidator is available
+    if ! command -v glslangValidator &> /dev/null; then
+        echo "Note: glslangValidator not found, skipping GLSL syntax validation"
+        echo "      Install with: brew install glslang (macOS) or apt install glslang-tools (Linux)"
+        return 0
+    fi
+
+    # Validate all .frag and .vert files
+    local glsl_errors=false
+    for file in shaders/*.frag player/*.vert; do
+        if [ -f "$file" ]; then
+            if ! glslangValidator -S frag "$file" > /dev/null 2>&1 && \
+               ! glslangValidator -S vert "$file" > /dev/null 2>&1; then
+                echo "Error: GLSL syntax error in $file"
+                glslangValidator "$file" 2>&1 || true
+                glsl_errors=true
+            fi
+        fi
+    done
+
+    if [ "$glsl_errors" = true ]; then
+        return 1
+    fi
+
+    return 0
+}
+
+# Run checks
+run_check "Manifest validation" validate_manifest || true
+run_check "GLSL syntax validation" validate_glsl || true
+
+# Clean up temp file
+rm -f /tmp/pre-commit-check.log
+
+echo ""
+echo "======================================================================"
+
+if [ "$ALL_PASSED" = true ]; then
+    echo "✅ All pre-commit checks passed!"
+    echo "======================================================================"
+    exit 0
+else
+    echo "❌ Some pre-commit checks failed"
+    echo "======================================================================"
+    echo ""
+    echo "To fix:"
+    echo "  • Manifest: Check shaders/manifest.json is valid JSON"
+    echo "  • Missing shaders: Add missing .frag files or remove from manifest"
+    echo "  • GLSL syntax: Fix shader compilation errors"
+    echo ""
+    echo "To skip these checks (NOT RECOMMENDED):"
+    echo "  git commit --no-verify"
+    echo ""
+    exit 1
+fi

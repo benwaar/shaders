@@ -1,6 +1,0 @@
-{
-  "vertices": [
-    "passthrough_uv.vert",
-    "clipspace_to_uv.vert"
-  ]
-}

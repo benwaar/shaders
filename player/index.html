@@ -17,21 +17,28 @@
     <label for="shaderSelect">Shader</label>
     <select id="shaderSelect"></select>
 
-     <div class="row">
-       <label>Vertex Shader</label>
-       <select id="vertSelect"></select>
-     </div>
+    <label for="imageSelect">Image</label>
+    <select id="imageSelect">
+      <option value="/assets/cassowary.jpg">Cassowary</option>
+      <option value="/assets/test.png">Test Pattern</option>
+    </select>
 
-    <label>Input Image</label>
-    <input id="fileInput" type="file" accept="image/*" />
+    <div id="fileInputGroup">
+      <label>Upload Custom Image</label>
+      <input id="fileInput" type="file" accept="image/*" />
+    </div>
 
-    <label for="tint">Tint</label>
-    <input id="tint" type="color" value="#ffffff" />
+    <div id="tintGroup" style="display: none;">
+      <label for="tint">Tint</label>
+      <input id="tint" type="color" value="#ffffff" />
+    </div>
 
-    <label for="strength">
-      Strength <span id="strengthVal" class="mono">0.00</span>
-    </label>
-    <input id="strength" type="range" min="0" max="1" step="0.01" value="0" />
+    <div id="strengthGroup" style="display: none;">
+      <label for="strength">
+        Strength <span id="strengthVal" class="mono">0.00</span>
+      </label>
+      <input id="strength" type="range" min="0" max="1" step="0.01" value="0" />
+    </div>
 
     <div id="errors" class="err"></div>
   </div>

@@ -3,18 +3,49 @@
 
 This is a GLSL Shader study to add some pizzazz to the art from the art study
 > [Prompt engineering art study](docs/art-prompts-to-specs/ART_PROMPT_TO_SPECS_STUDY.md)   
-> [Shader languages](docs/shader_languages.md)
+> [Shader languages Notes](docs/shader_languages.md)
 
 ---
 
-## Creative Primitives to Learn & Remix
+## Learning Path
+
+### Phase 1: Fundamentals
 - Gradients (linear, radial, cosine palettes)
-- Coordinate transforms (scale, rotate, polar, ripple, twist)
+- Coordinate transforms (scale, rotate, polar)
+- UV manipulation basics
+- Debugging workflow (visualize intermediate values, color channels)
+
+### Phase 2: Shapes & Composition
 - Signed Distance Functions (basic shapes, smooth unions)
 - Repetition & symmetry (tiling, mirroring, kaleidoscope)
-- Noise (value/simplex, fbm, domain warping)
 - Layering & compositing (add, multiply, mask, blend)
+
+### Phase 3: Procedural Generation
+- Noise (value/simplex, fbm)
+- Domain warping & distortion
+- Advanced transforms (ripple, twist, kaleidoscope)
+
+### Phase 4: Animation & Polish
 - Time modulation (loops, easing, bounded motion)
+- Post-processing effects (bloom, vignette, chromatic aberration)
+- Raymarching basics (optional, for 3D scenes)
+
+---
+
+## Practice Approach
+- **2-3 sketches per primitive** — quick experiments to understand behavior
+- **"Finished" study** — one polished piece combining 2-3 techniques per phase
+- **Daily vs. deep** — 30min daily experiments OR 2hr focused studies
+- **Document learnings** — note surprising behaviors, useful patterns, gotchas
+
+---
+
+## Milestone Projects
+
+1. **Phase 1 Complete**: Animated gradient using 2+ coordinate transforms
+2. **Phase 2 Complete**: Kaleidoscope/mandala pattern with SDFs and symmetry
+3. **Phase 3 Complete**: Organic shape with noise-driven animation
+4. **Final**: Original artistic shader combining 5+ techniques from all phases
 
 ---
 
