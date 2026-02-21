@@ -43,6 +43,10 @@ out/
 bin/
 coverage/
 
+# Python bytecode
+__pycache__/
+*.pyc
+
 # Research and notebook artifacts
 docs/~$*.docx
 docs/~*.tmp

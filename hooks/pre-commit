@@ -85,12 +85,51 @@ validate_glsl() {
     local glsl_errors=false
     for file in shaders/*.frag player/*.vert; do
         if [ -f "$file" ]; then
-            if ! glslangValidator -S frag "$file" > /dev/null 2>&1 && \
-               ! glslangValidator -S vert "$file" > /dev/null 2>&1; then
-                echo "Error: GLSL syntax error in $file"
-                glslangValidator "$file" 2>&1 || true
-                glsl_errors=true
-            fi
+                        # Preprocess `#include "..."` lines into a temp file (resolve relative to the file's dir)
+                        TMP_FILE=$(mktemp)
+
+                        if ! python3 - "$file" "$TMP_FILE" <<'PY'
+import sys, os, re
+sys.setrecursionlimit(10000)
+
+def resolve(path, depth=0):
+    if depth > 16:
+        raise SystemExit('Include depth exceeded')
+    try:
+        txt = open(path, 'r').read()
+    except Exception:
+        raise SystemExit('MISSING_INCLUDE:'+path)
+
+    include_re = re.compile(r'^[ \t]*#include\s+"([^\"]+)"[ \t]*$', re.M)
+
+    def repl(m):
+        name = m.group(1)
+        incpath = os.path.join(os.path.dirname(path), name)
+        return resolve(incpath, depth+1)
+
+    return include_re.sub(repl, txt)
+
+try:
+    out = resolve(sys.argv[1])
+    open(sys.argv[2], 'w').write(out)
+except SystemExit as e:
+    print(str(e))
+    sys.exit(1)
+PY
+                        then
+                            echo "Error: Failed to resolve includes for $file"
+                            cat "$TMP_FILE" 2>/dev/null || true
+                            glsl_errors=true
+                        else
+                            if ! glslangValidator -S frag "$TMP_FILE" > /tmp/pre-commit-check.log 2>&1 && \
+                               ! glslangValidator -S vert "$TMP_FILE" > /tmp/pre-commit-check.log 2>&1; then
+                                echo "Error: GLSL syntax error in $file"
+                                cat /tmp/pre-commit-check.log
+                                glsl_errors=true
+                            fi
+                        fi
+
+                        rm -f "$TMP_FILE"
         fi
     done
 

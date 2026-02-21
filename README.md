@@ -7,6 +7,15 @@ This is a GLSL Shader study to add some pizzazz to the art from the art study
 
 ---
 
+## Quick Setup for coding your own
+
+See the player README: [player/README_PLAYER.md](player/README_PLAYER.md)
+
+- **Install GLSL validator:** `brew install glslang`
+- **Install git hooks:** run `bash install-hooks.sh` from the repo root
+
+---
+
 ## Learning Path
 
 ### Phase 1: Fundamentals
