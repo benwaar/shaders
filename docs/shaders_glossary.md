@@ -1,5 +1,3 @@
-
-
 # Glossary — 2D GLSL Shader Terms
 
 ## Table of Contents
@@ -39,6 +37,7 @@
 - [UV Coordinates](#uv-coordinates)
 - [Value Visualization](#value-visualization)
 - [Varying](#varying)
+- [VFX](#vfx)
 - [Vertex Shader](#vertex-shader)
 - [View Direction](#view-direction)
 
@@ -141,6 +140,19 @@ Changing the domain changes the resulting pattern.
 
 ---
 
+## Domain Warping
+Distorting input coordinates before evaluating a function.
+
+Instead of modifying color directly, you modify space:
+
+```glsl
+uv += noise(uv * 2.0) * 0.1;
+```
+
+Creates organic motion, turbulence, and flowing distortion.
+
+---
+
 ## Dot Product
 A mathematical operation that measures how aligned two vectors are.
 
@@ -155,6 +167,27 @@ Used in lighting to determine how directly light hits a surface.
 ## Fragment Shader
 A shader that runs once per pixel.  
 In 2D development, this is where most visual effects are implemented.
+
+---
+
+## Fract
+Returns the fractional part of a number.
+
+```glsl
+fract(x);
+```
+
+Commonly used for tiling and repetition in UV space.
+
+---
+
+## Frequency
+How rapidly a pattern changes across space.
+
+High frequency → fine detail  
+Low frequency → broad shapes  
+
+Usually controlled by scaling UV coordinates.
 
 ---
 
@@ -196,6 +229,18 @@ Extremely common for blending colors and effects.
 
 ---
 
+## Modulation
+Using one value to influence another.
+
+Examples:
+- Time modulating position
+- Noise modulating color
+- Distance modulating brightness
+
+Animation is controlled modulation.
+
+---
+
 ## Noise
 Procedural randomness used to generate organic-looking effects.  
 Commonly used for fire, smoke, dissolve effects, and distortion.
@@ -231,105 +276,6 @@ normal = normal * 2.0 - 1.0;
 ## Parallax
 A technique that fakes depth by shifting texture coordinates based on viewing angle.  
 Rare in pure 2D, but sometimes used for layered background effects.
-
----
-
-## Smoothstep
-A function that smoothly interpolates between two values.
-
-```glsl
-smoothstep(edge0, edge1, x);
-```
-
-Very useful for soft transitions, fades, glows, and masks.
-
----
-
-## Specular
-In 3D lighting, the shiny highlight on a surface.  
-In 2D, usually stylized or faked, and only needed for dynamic lighting systems.
-
----
-
-## Texture Sampling
-Reading data from a texture using UV coordinates.
-
-```glsl
-vec4 color = texture(u_texture, uv);
-```
-
-The foundation of most 2D shaders.
-
----
-
-## UV Coordinates
-Normalized texture coordinates ranging from 0.0 to 1.0.  
-Used to sample textures and manipulate distortion effects.
-
----
-
-## Varying
-A value passed from the vertex shader to the fragment shader.  
-Commonly used to pass UV coordinates.
-
----
-
-## Vertex Shader
-A shader that runs once per vertex.  
-In most 2D sprite systems, this is simple or fixed, unless doing custom deformation.
-
----
-
-## View Direction
-The direction from a surface toward the camera.  
-Important in 3D lighting, rarely needed in 2D shaders.
-
----
----
-
-## Domain Warping
-Distorting input coordinates before evaluating a function.
-
-Instead of modifying color directly, you modify space:
-
-```glsl
-uv += noise(uv * 2.0) * 0.1;
-```
-
-Creates organic motion, turbulence, and flowing distortion.
-
----
-
-## Fract
-Returns the fractional part of a number.
-
-```glsl
-fract(x);
-```
-
-Commonly used for tiling and repetition in UV space.
-
----
-
-## Frequency
-How rapidly a pattern changes across space.
-
-High frequency → fine detail  
-Low frequency → broad shapes  
-
-Usually controlled by scaling UV coordinates.
-
----
-
-## Modulation
-Using one value to influence another.
-
-Examples:
-- Time modulating position
-- Noise modulating color
-- Distance modulating brightness
-
-Animation is controlled modulation.
 
 ---
 
@@ -375,6 +321,23 @@ Creates organic merging forms instead of hard intersections.
 
 ---
 
+## Smoothstep
+A function that smoothly interpolates between two values.
+
+```glsl
+smoothstep(edge0, edge1, x);
+```
+
+Very useful for soft transitions, fades, glows, and masks.
+
+---
+
+## Specular
+In 3D lighting, the shiny highlight on a surface.  
+In 2D, usually stylized or faked, and only needed for dynamic lighting systems.
+
+---
+
 ## Symmetry
 Mirroring space across an axis to duplicate structure.
 
@@ -383,6 +346,17 @@ uv.x = abs(uv.x);
 ```
 
 Common in kaleidoscopic and mandala-style patterns.
+
+---
+
+## Texture Sampling
+Reading data from a texture using UV coordinates.
+
+```glsl
+vec4 color = texture(u_texture, uv);
+```
+
+The foundation of most 2D shaders.
 
 ---
 
@@ -397,6 +371,12 @@ Often shaped using `sin`, `cos`, or `smoothstep` to create loops.
 
 ---
 
+## UV Coordinates
+Normalized texture coordinates ranging from 0.0 to 1.0.  
+Used to sample textures and manipulate distortion effects.
+
+---
+
 ## Value Visualization
 A debugging technique where intermediate values are output directly as color.
 
@@ -405,5 +385,28 @@ gl_FragColor = vec4(vec3(distance), 1.0);
 ```
 
 Essential for understanding procedural behavior.
+
+---
+
+## Varying
+A value passed from the vertex shader to the fragment shader.  
+Commonly used to pass UV coordinates.
+
+---
+
+## VFX
+Visual Effects - Digital visual manipulation like Fire, Smoke, Glitch effects, Lighting, Post-processing, Distortion, Stylized rendering
+
+---
+
+## Vertex Shader
+A shader that runs once per vertex.  
+In most 2D sprite systems, this is simple or fixed, unless doing custom deformation.
+
+---
+
+## View Direction
+The direction from a surface toward the camera.  
+Important in 3D lighting, rarely needed in 2D shaders.
 
 ---

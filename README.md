@@ -16,7 +16,7 @@ See the player README: [player/README_PLAYER.md](player/README_PLAYER.md)
 
 ---
 
-## Learning Path
+## Shader VFX Learning Path
 
 Check out the [Key Learning Resources](#key-learning-resources) below and have a read of the [shaders intro](docs/shaders_intro.md) and the [glossary](shaders_glossary.md).
 
@@ -52,7 +52,7 @@ Design and implement original artistic shaders that combine multiple techniques 
 
 ---
 
-### Phase 1: Fundamentals
+### Phase 1: [Fundamentals](docs/shader_fundamentals.md)
 - Gradients (linear, radial, cosine palettes)
 - Coordinate transforms (scale, rotate, polar)
 - UV manipulation basics
@@ -76,6 +76,7 @@ Design and implement original artistic shaders that combine multiple techniques 
 ---
 
 ## Practice Approach
+- **consider [light constraints](docs/shader_light_constraints.md)** for each sketch - use selectively
 - **2-3 sketches per primitive** — quick experiments to understand behavior
 - **"Finished" study** — one polished piece combining 2-3 techniques per phase
 - **Daily vs. deep** — 30min daily experiments OR 2hr focused studies
@@ -89,15 +90,6 @@ Design and implement original artistic shaders that combine multiple techniques 
 2. **Phase 2 Complete**: Kaleidoscope/mandala pattern with SDFs and symmetry
 3. **Phase 3 Complete**: Organic shape with noise-driven animation
 4. **Final**: Original artistic shader combining 5+ techniques from all phases
-
----
-
-## Light Constraints (use selectively)
-- One visual idea per sketch
-- ≤ 2 noise calls per pass
-- Neutral/off state exists
-- Loopable in a fixed duration (e.g. 4s)
-- Works at multiple aspect ratios
 
 ---
 
