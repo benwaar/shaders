@@ -1,7 +1,7 @@
 # 🎨 Shader Study
 
 
-This is a GLSL Shader study to add some pizzazz to the art from the art study
+This is a GLSL Shader study to add some pizzazz to the art from an earlier prompt engineering art study
 > [Prompt engineering art study](docs/art-prompts-to-specs/ART_PROMPT_TO_SPECS_STUDY.md)   
 > [Shader languages Notes](docs/shader_languages.md)
 
@@ -17,6 +17,40 @@ See the player README: [player/README_PLAYER.md](player/README_PLAYER.md)
 ---
 
 ## Learning Path
+
+Check out the [Key Learning Resources](#key-learning-resources) below and have a read of the [shaders intro](docs/shaders_intro.md) and the [glossary](shaders_glossary.md).
+
+---
+
+## 🎯 Learning Objectives
+
+By completing this study, you should be able to:
+
+### Technical
+
+- Manipulate UV space (transform, repeat, warp)
+- Build gradients and palettes procedurally
+- Construct and combine SDF shapes
+- Use noise with control and intention
+- Animate with loopable, bounded time modulation
+- Debug by visualizing intermediate values
+
+---
+
+### Artistic
+
+- Translate visual ideas into mathematical components
+- Layer simple techniques into cohesive compositions
+- Use constraints to improve clarity and polish
+- Iterate quickly from sketch → refinement → finished piece
+
+---
+
+### Outcome
+
+Design and implement original artistic shaders that combine multiple techniques without losing clarity or control.
+
+---
 
 ### Phase 1: Fundamentals
 - Gradients (linear, radial, cosine palettes)
@@ -68,6 +102,7 @@ See the player README: [player/README_PLAYER.md](player/README_PLAYER.md)
 ---
 
 ## Key Learning Resources
+
 - **The Book of Shaders** — foundational concepts & exercises  
   https://thebookofshaders.com/
 - **Inigo Quilez (iq)** — SDFs, noise, domain tricks  
