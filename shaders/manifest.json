@@ -20,6 +20,27 @@
       "description": "Tests #include system with magenta blend",
       "phase": 0,
       "controls": ["strength"]
+    },
+    {
+      "file": "1_1_linear_gradient.frag",
+      "name": "1.1 Linear Gradient",
+      "description": "Gradient flowing left to right",
+      "phase": 1,
+      "controls": ["tint", "strength"]
+    },
+    {
+      "file": "1_2_radial_gradient.frag",
+      "name": "1.2 Radial Gradient",
+      "description": "Gradient radiating from center",
+      "phase": 1,
+      "controls": ["tint", "strength"]
+    },
+    {
+      "file": "1_3_cosine_palette.frag",
+      "name": "1.3 Cosine Palette",
+      "description": "Smooth color palette using cosine functions",
+      "phase": 1,
+      "controls": ["strength"]
     }
   ]
 }
