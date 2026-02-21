@@ -16,6 +16,8 @@ const errorsEl = document.getElementById("errors");
 // UI control groups (for show/hide)
 const tintGroup = document.getElementById("tintGroup");
 const strengthGroup = document.getElementById("strengthGroup");
+const imageSelectGroup = document.getElementById("imageSelectGroup");
+const fileInputGroup = document.getElementById("fileInputGroup");
 
 // Shader metadata storage
 let shaderMetadata = new Map(); // Maps filename -> {name, description, phase, controls}
@@ -236,6 +238,8 @@ function updateControlsVisibility(shaderFile) {
     // If no metadata, show all controls (backward compatibility)
     if (tintGroup) tintGroup.style.display = "";
     if (strengthGroup) strengthGroup.style.display = "";
+    if (imageSelectGroup) imageSelectGroup.style.display = "";
+    if (fileInputGroup) fileInputGroup.style.display = "";
     return;
   }
 
@@ -247,6 +251,12 @@ function updateControlsVisibility(shaderFile) {
   }
   if (strengthGroup) {
     strengthGroup.style.display = controls.includes("strength") ? "" : "none";
+  }
+  if (imageSelectGroup) {
+    imageSelectGroup.style.display = controls.includes("image") ? "" : "none";
+  }
+  if (fileInputGroup) {
+    fileInputGroup.style.display = controls.includes("image") ? "" : "none";
   }
 }
 

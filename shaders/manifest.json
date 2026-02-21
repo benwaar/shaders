@@ -5,21 +5,21 @@
       "name": "0.1 Passthrough",
       "description": "Simple texture display",
       "phase": 0,
-      "controls": []
+      "controls": ["image"]
     },
     {
       "file": "0_2_tint.frag",
       "name": "0.2 Tint",
       "description": "Color tinting with blend strength",
       "phase": 0,
-      "controls": ["tint", "strength"]
+      "controls": ["image", "tint", "strength"]
     },
     {
       "file": "0_3_include_test.frag",
       "name": "0.3 Magenta Blend (Tests #include)",
       "description": "Tests #include system with magenta blend",
       "phase": 0,
-      "controls": ["strength"]
+      "controls": ["image", "strength"]
     },
     {
       "file": "1_1_linear_gradient.frag",
