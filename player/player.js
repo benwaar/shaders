@@ -281,11 +281,14 @@ function updateControlsVisibility(shaderFile) {
   if (strengthGroup) {
     strengthGroup.style.display = controlList.includes("strength") ? "" : "none";
     // Update strength label and hint
-    if (strengthLabel) {
-      strengthLabel.textContent = controlDescs.strength || "Strength";
-    }
-    if (strengthHint) {
-      strengthHint.textContent = controlDescs.strength || "";
+    const strengthDesc = controlDescs.strength;
+    if (strengthDesc && strengthDesc.includes(": ")) {
+      const [label, hint] = strengthDesc.split(": ", 2);
+      if (strengthLabel) strengthLabel.textContent = label + ":";
+      if (strengthHint) strengthHint.textContent = hint;
+    } else {
+      if (strengthLabel) strengthLabel.textContent = strengthDesc || "Strength:";
+      if (strengthHint) strengthHint.textContent = "";
     }
   }
   if (imageSelectGroup) {
