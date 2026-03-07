@@ -33,10 +33,12 @@ let imageWidth = 0;
 let imageHeight = 0;
 
 // ---- Paths (edit if your folders differ) ----
-const SHADER_DIR = "../shaders/";                 // fragment shaders + manifest
+// Use relative paths so the entire `dist` tree can be served from any base
+// (GitHub pages will host the repo at /<username>.github.io/shaders/).
+const SHADER_DIR = "./shaders/";                 // fragment shaders + manifest
 const VERT_SHADER_PATH = "./shader.vert";         // single vertex shader (part of player)
 const MANIFEST_URL = SHADER_DIR + "manifest.json";
-const DEFAULT_IMAGE_URL = "/assets/cassowary.jpg"; // default image
+const DEFAULT_IMAGE_URL = "assets/cassowary.jpg"; // default image (relative)
 
 // Fullscreen quad (2 triangles) in clip space
 const quad = new Float32Array([
