@@ -1,9 +1,17 @@
 # 🎨 Shader Study
 
+[![Deploy to GitHub Pages](https://github.com/benwaar/shaders/actions/workflows/deploy.yml/badge.svg)](https://github.com/benwaar/shaders/actions/workflows/deploy.yml)
 
 This is a GLSL Shader study to add some pizzazz to the art from an earlier prompt engineering art study
 > [Prompt engineering art study](docs/art-prompts-to-specs/ART_PROMPT_TO_SPECS_STUDY.md)   
 > [Shader languages Notes](docs/shader_languages.md)
+
+---
+
+## 🚀 Live Player
+
+Deployed automatically via GitHub Pages on pushes to `main`:
+**[Play online →](https://benwaar.github.io/shaders/player/)**
 
 ---
 
