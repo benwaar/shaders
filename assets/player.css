@@ -21,11 +21,27 @@ canvas {
 #panel {
   display: flex;
   flex-direction: column;
-  padding: 12px;
+  padding: 16px;
   border-left: 1px solid #333;
   background: #0b0b0b;
   color: #eee;
   box-sizing: border-box;
+}
+
+/* make the shader selector more prominent */
+#shaderSelect {
+  font-size: 1.1em;
+  font-weight: bold;
+  padding: 4px 6px;
+  margin-bottom: 12px;
+}
+
+/* larger label text for clarity */
+label {
+  display: block;
+  margin: 12px 0 6px;
+  font-size: 14px;
+  color: #ccc;
 }
 
 #panel .footer {
@@ -51,6 +67,8 @@ label {
 input, select {
   width: 100%;
   box-sizing: border-box;
+  padding: 4px 6px;
+  margin-bottom: 8px; /* space below each control */
 }
 .row {
   display: grid;
