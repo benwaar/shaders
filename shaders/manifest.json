@@ -12,35 +12,104 @@
       "name": "0.2 Tint",
       "description": "Color tinting with blend strength",
       "phase": 0,
-      "controls": ["image", "tint", "strength"]
+      "controls": {
+        "image": null,
+        "tint": null,
+        "strength": "Blend amount: 0 = original, 1 = full tint"
+      }
     },
     {
       "file": "0_3_include_test.frag",
       "name": "0.3 Magenta Blend (Tests #include)",
       "description": "Tests #include system with magenta blend",
       "phase": 0,
-      "controls": ["image", "strength"]
+      "controls": {
+        "image": null,
+        "strength": "Magenta blend: 0 = original, 1 = full magenta"
+      }
     },
     {
       "file": "1_1_linear_gradient.frag",
       "name": "1.1 Linear Gradient",
       "description": "Gradient flowing left to right",
       "phase": 1,
-      "controls": ["tint", "strength"]
+      "controls": {
+        "tint": null,
+        "strength": "Color intensity: 0 = neutral, 1 = full tint"
+      }
     },
     {
       "file": "1_2_radial_gradient.frag",
       "name": "1.2 Radial Gradient",
       "description": "Gradient radiating from center",
       "phase": 1,
-      "controls": ["tint", "strength"]
+      "controls": {
+        "tint": null,
+        "strength": "Color intensity: 0 = neutral, 1 = full tint"
+      }
     },
     {
       "file": "1_3_cosine_palette.frag",
       "name": "1.3 Cosine Palette",
       "description": "Smooth color palette using cosine functions",
       "phase": 1,
-      "controls": ["strength"]
+      "controls": {
+        "strength": "Palette speed: controls frequency & smoothness"
+      }
+    },
+    {
+      "file": "1_4_scale_transform.frag",
+      "name": "1.4 Scale Transform",
+      "description": "Zoom in/out: observe how scaling affects pattern frequency",
+      "phase": 1,
+      "controls": {
+        "strength": "Zoom level: 0 = 0.5×, 0.5 = 1.0×, 1.0 = 2.0×"
+      }
+    },
+    {
+      "file": "1_5_rotate_transform.frag",
+      "name": "1.5 Rotate Transform",
+      "description": "Spin gradient around center: see rotation in action",
+      "phase": 1,
+      "controls": {
+        "strength": "Rotation: 0 = 0°, 0.5 = 180°, 1.0 = 360°"
+      }
+    },
+    {
+      "file": "1_6_polar_transform.frag",
+      "name": "1.6 Polar Transform",
+      "description": "Convert to polar coords: blends radial vs angular patterns",
+      "phase": 1,
+      "controls": {
+        "strength": "Pattern: 0 = radial rings, 1 = angular wedges"
+      }
+    },
+    {
+      "file": "1_7_tiling.frag",
+      "name": "1.7 Tiling (Repeat)",
+      "description": "Use fract() to tile patterns infinitely across the canvas",
+      "phase": 1,
+      "controls": {
+        "strength": "Tile frequency: 0 = 1 tile, 1 = 8 tiles"
+      }
+    },
+    {
+      "file": "1_8_clamping.frag",
+      "name": "1.8 Clamping",
+      "description": "Understand coordinate boundaries: clamp vs out-of-bounds",
+      "phase": 1,
+      "controls": {
+        "strength": "Zoom scale: 0 = 1×, 1 = 3× (see boundary effects)"
+      }
+    },
+    {
+      "file": "1_9_distortion.frag",
+      "name": "1.9 Wave Distortion",
+      "description": "Warp UV space with sine waves: foundation for water, shimmer effects",
+      "phase": 1,
+      "controls": {
+        "strength": "Distortion amount: 0 = none, 1 = extreme waves"
+      }
     }
   ]
 }
