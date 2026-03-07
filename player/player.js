@@ -280,7 +280,7 @@ function updateControlsVisibility(shaderFile) {
     strengthGroup.style.display = controlList.includes("strength") ? "" : "none";
     // Update strength label and hint
     if (strengthLabel) {
-      strengthLabel.textContent = "Strength";
+      strengthLabel.textContent = controlDescs.strength || "Strength";
     }
     if (strengthHint) {
       strengthHint.textContent = controlDescs.strength || "";
