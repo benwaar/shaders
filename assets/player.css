@@ -19,11 +19,28 @@ canvas {
   display: block;
 }
 #panel {
+  display: flex;
+  flex-direction: column;
   padding: 12px;
   border-left: 1px solid #333;
   background: #0b0b0b;
   color: #eee;
   box-sizing: border-box;
+}
+
+#panel .footer {
+  margin-top: auto;
+  font-size: 0.8em;
+  text-align: center;
+}
+
+#panel .footer a {
+  color: #6cf;
+  text-decoration: none;
+}
+
+#panel .footer a:hover {
+  text-decoration: underline;
 }
 label {
   display: block;

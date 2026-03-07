@@ -10,17 +10,32 @@ This is a GLSL Shader study to add some pizzazz to the art from an earlier promp
 
 ## 🚀 Live Player
 
-Deployed automatically via GitHub Pages on pushes to `main`:
-**[Play online →](https://benwaar.github.io/shaders/player/)**
+Deployed automatically via GitHub Pages on pushes to `main`.
+The site is built into a `dist` folder so the player can live at the repository root; links are all relative so it works at
+`https://benwaar.github.io/shaders/`.
+
+**[Play online →](https://benwaar.github.io/shaders/)**
 
 ---
 
 ## Quick Setup for coding your own
 
-See the player README: [player/README_PLAYER.md](player/README_PLAYER.md)
+See the player README: [player/README_PLAYER.md](player/README_PLAYER.md) (no build step required for local experimentation; the `build.sh` script is only used for packaging/deployment)
 
 - **Install GLSL validator:** `brew install glslang`
 - **Install git hooks:** run `bash install-hooks.sh` from the repo root
+
+**To produce a deployable copy of the site:**
+
+```bash
+# packages everything under `dist/` and runs validation
+bash build.sh
+# serve the production build locally
+cd dist && python3 -m http.server 8000
+# open http://localhost:8000 and make sure the player still works
+```
+
+(you normally don't need to run this unless you want to verify the GitHub Pages output)
 
 ---
 

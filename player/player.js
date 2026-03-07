@@ -19,8 +19,13 @@ const strengthGroup = document.getElementById("strengthGroup");
 const imageSelectGroup = document.getElementById("imageSelectGroup");
 const fileInputGroup = document.getElementById("fileInputGroup");
 
+// Control label/hint elements
+const strengthLabel = document.getElementById("strengthLabel");
+const strengthHint = document.getElementById("strengthHint");
+const tintHint = document.getElementById("tintHint");
+
 // Shader metadata storage
-let shaderMetadata = new Map(); // Maps filename -> {name, description, phase, controls}
+let shaderMetadata = new Map(); // Maps filename -> {name, description, phase, controls, controlDescriptions}
 let currentShaderFile = null;
 
 // Image dimensions (for canvas sizing)
@@ -240,23 +245,52 @@ function updateControlsVisibility(shaderFile) {
     if (strengthGroup) strengthGroup.style.display = "";
     if (imageSelectGroup) imageSelectGroup.style.display = "";
     if (fileInputGroup) fileInputGroup.style.display = "";
+    // Reset labels/hints to defaults
+    if (strengthLabel) strengthLabel.textContent = "Strength";
+    if (strengthHint) strengthHint.textContent = "";
+    if (tintHint) tintHint.textContent = "";
     return;
   }
 
   const controls = metadata.controls || [];
+  const controlDescriptions = metadata.controlDescriptions || {};
 
-  // Update visibility based on controls array
+  // Parse controls: can be array (old format) or object (new format)
+  let controlList = [];
+  let controlDescs = {};
+
+  if (Array.isArray(controls)) {
+    // Old format: ["tint", "strength", "image"]
+    controlList = controls;
+    controlDescs = {};
+  } else if (typeof controls === "object") {
+    // New format: {"strength": "description", "tint": null, "image": null}
+    controlList = Object.keys(controls);
+    controlDescs = controls;
+  }
+
+  // Update visibility based on controls list
   if (tintGroup) {
-    tintGroup.style.display = controls.includes("tint") ? "" : "none";
+    tintGroup.style.display = controlList.includes("tint") ? "" : "none";
+    if (tintHint) {
+      tintHint.textContent = controlDescs.tint || "";
+    }
   }
   if (strengthGroup) {
-    strengthGroup.style.display = controls.includes("strength") ? "" : "none";
+    strengthGroup.style.display = controlList.includes("strength") ? "" : "none";
+    // Update strength label and hint
+    if (strengthLabel) {
+      strengthLabel.textContent = "Strength";
+    }
+    if (strengthHint) {
+      strengthHint.textContent = controlDescs.strength || "";
+    }
   }
   if (imageSelectGroup) {
-    imageSelectGroup.style.display = controls.includes("image") ? "" : "none";
+    imageSelectGroup.style.display = controlList.includes("image") ? "" : "none";
   }
   if (fileInputGroup) {
-    fileInputGroup.style.display = controls.includes("image") ? "" : "none";
+    fileInputGroup.style.display = controlList.includes("image") ? "" : "none";
   }
 }
 

@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Minimal Shader Player</title>
-  <link rel="stylesheet" href="/assets/player.css">
+  <title>GLSL Player</title>
+  <link rel="stylesheet" href="assets/player.css">
 </head>
 <body>
   <div id="view">
@@ -12,7 +12,7 @@
   </div>
 
   <div id="panel">
-    <div class="mono">Minimal Shader Player</div>
+    <div class="mono">GLSL Player</div>
 
     <label for="shaderSelect">Shader</label>
     <select id="shaderSelect"></select>
@@ -20,8 +20,8 @@
     <div id="imageSelectGroup">
       <label for="imageSelect">Image</label>
       <select id="imageSelect">
-        <option value="/assets/cassowary.jpg">Cassowary</option>
-        <option value="/assets/test.png">Test Pattern</option>
+        <option value="assets/cassowary.jpg">Cassowary</option>
+        <option value="assets/test.png">Test Pattern</option>
       </select>
     </div>
 
@@ -33,16 +33,22 @@
     <div id="tintGroup" style="display: none;">
       <label for="tint">Tint</label>
       <input id="tint" type="color" value="#ffffff" />
+      <div id="tintHint" class="hint"></div>
     </div>
 
     <div id="strengthGroup" style="display: none;">
       <label for="strength">
-        Strength <span id="strengthVal" class="mono">0.00</span>
+        <span id="strengthLabel">Strength</span> <span id="strengthVal" class="mono">0.00</span>
       </label>
       <input id="strength" type="range" min="0" max="1" step="0.01" value="0" />
+      <div id="strengthHint" class="hint"></div>
     </div>
 
     <div id="errors" class="err"></div>
+
+    <div class="footer">
+      <a href="https://github.com/benwaar/shaders" target="_blank" rel="noopener">View source on GitHub</a>
+    </div>
   </div>
 
   <script type="module" src="./player.js"></script>

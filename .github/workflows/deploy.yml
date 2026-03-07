@@ -24,12 +24,19 @@ jobs:
 
       - name: Validate shaders
         run: |
+          # explicit validation step so failures are obvious in logs
           bash validate.sh
+
+      - name: Run build
+        run: |
+          # build.sh also validates, but we already validated above
+          bash build.sh
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./player
+          # publish the contents of the distribution directory, not the raw player folder
+          path: ./dist
 
   deploy:
     environment:
