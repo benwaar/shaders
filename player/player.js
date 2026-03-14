@@ -35,10 +35,13 @@ let imageHeight = 0;
 // ---- Paths (edit if your folders differ) ----
 // Use relative paths so the entire `dist` tree can be served from any base
 // (GitHub pages will host the repo at /<username>.github.io/shaders/).
-const SHADER_DIR = "./shaders/";                 // fragment shaders + manifest
-const VERT_SHADER_PATH = "./shader.vert";         // single vertex shader (part of player)
-const MANIFEST_URL = SHADER_DIR + "manifest.json";
-const DEFAULT_IMAGE_URL = "assets/cassowary.jpg"; // default image (relative)
+const inPlayerDir = new URL(import.meta.url).pathname.includes('/player/');
+const REPO_BASE = inPlayerDir ? '../' : './';
+
+const SHADER_DIR = REPO_BASE + 'shaders/';
+const VERT_SHADER_PATH = './shader.vert';
+const MANIFEST_URL = SHADER_DIR + 'manifest.json';
+const DEFAULT_IMAGE_URL = REPO_BASE + 'assets/cassowary.jpg';
 
 // Fullscreen quad (2 triangles) in clip space
 const quad = new Float32Array([
@@ -437,7 +440,7 @@ async function main() {
   // Select preset image
   imageSelect.addEventListener("change", async () => {
     try {
-      const url = imageSelect.value;
+      const url = REPO_BASE + imageSelect.value;
       const img = await loadImage(url);
       if (tex) gl.deleteTexture(tex);
       tex = createTextureFromImage(img);

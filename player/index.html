@@ -4,7 +4,15 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>GLSL Player</title>
-  <link rel="stylesheet" href="assets/player.css">
+  <script>
+    const inPlayerDir = window.location.pathname.includes('/player/');
+    const repoBase = inPlayerDir ? '../' : './';
+
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = repoBase + 'assets/player.css';
+    document.head.appendChild(link);
+  </script>
 </head>
 <body>
   <div id="view">
