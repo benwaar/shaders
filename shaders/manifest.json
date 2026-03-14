@@ -110,6 +110,15 @@
       "controls": {
         "strength": "Distortion amount: 0 = none, 1 = extreme waves"
       }
+    },
+    {
+      "file": "1_10_debug_rotate_transform.frag",
+      "name": "1.10 Debug Rotate Transform",
+      "description": "Spin gradient around center: see rotation in action",
+      "phase": 1,
+      "controls": {
+        "strength": "Rotation: 0 = 0°, 0.5 = 180°, 1.0 = 360°"
+      }
     }
   ]
 }
