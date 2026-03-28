@@ -4,6 +4,21 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>GLSL Player</title>
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      opacity: 0;
+    }
+
+    body.player-shell-ready {
+      transition: opacity 260ms ease;
+    }
+
+    body.player-ready {
+      opacity: 1;
+    }
+  </style>
   <script>
     const inPlayerDir = window.location.pathname.includes('/player/');
     const repoBase = inPlayerDir ? '../' : './';
@@ -11,6 +26,12 @@
     const link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = repoBase + 'assets/player.css';
+
+    link.onload = () => {
+      document.body.classList.add('player-shell-ready');
+      window.dispatchEvent(new Event('player-shell-ready'));
+    };
+
     document.head.appendChild(link);
   </script>
 </head>

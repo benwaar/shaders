@@ -23,10 +23,12 @@ const fileInputGroup = document.getElementById("fileInputGroup");
 const strengthLabel = document.getElementById("strengthLabel");
 const strengthHint = document.getElementById("strengthHint");
 const tintHint = document.getElementById("tintHint");
+const body = document.body;
 
 // Shader metadata storage
 let shaderMetadata = new Map(); // Maps filename -> {name, description, phase, controls, controlDescriptions}
 let currentShaderFile = null;
+let hasMarkedReady = false;
 
 // Image dimensions (for canvas sizing)
 let imageWidth = 0;
@@ -56,6 +58,22 @@ const quad = new Float32Array([
 function setError(msg) {
   errorsEl.textContent = msg ? String(msg) : "";
   if (msg) console.error(msg);
+}
+
+function markPlayerReady() {
+  if (hasMarkedReady) return;
+  hasMarkedReady = true;
+
+  if (body.classList.contains("player-shell-ready")) {
+    body.classList.add("player-ready");
+    return;
+  }
+
+  window.addEventListener(
+    "player-shell-ready",
+    () => body.classList.add("player-ready"),
+    { once: true }
+  );
 }
 
 function resizeCanvasToImageSize() {
@@ -428,6 +446,7 @@ async function main() {
   // Load latest (last) shader by default
   shaderSelect.selectedIndex = shaderSelect.options.length - 1;
   await loadShaderAndBuild(shaderSelect.value);
+  markPlayerReady();
 
   shaderSelect.addEventListener("change", async () => {
     try {
@@ -471,4 +490,5 @@ async function main() {
 
 main().catch((e) => {
   setError("Player failed to start:\n" + (e?.stack || e));
+  markPlayerReady();
 });
